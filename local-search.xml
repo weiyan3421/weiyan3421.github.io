@@ -4,83 +4,6 @@
   
   
   <entry>
-    <title>centos7环境</title>
-    <link href="/2025/centos7%E7%8E%AF%E5%A2%83/"/>
-    <url>/2025/centos7%E7%8E%AF%E5%A2%83/</url>
-    
-    <content type="html"><![CDATA[<h3 id="openssl"><a href="#openssl" class="headerlink" title="openssl"></a>openssl</h3><p>CentOS 7 默认的 OpenSSL 是 1.0.x，而 Python 3.12 需要 1.1.x 或更高版本。因此，可能需要手动升级 OpenSSL。</p>]]></content>
-    
-    
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>镜像打包</title>
-    <link href="/2025/%E9%95%9C%E5%83%8F%E6%89%93%E5%8C%85/"/>
-    <url>/2025/%E9%95%9C%E5%83%8F%E6%89%93%E5%8C%85/</url>
-    
-    <content type="html"><![CDATA[<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><p>解压openjdk包</p><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">tar</span> -zxvf openjdk-<span class="hljs-number">12</span>.<span class="hljs-number">0</span>.<span class="hljs-number">2</span>_linux-x64_bin.tar_2.gz -C /opt/<br></code></pre></td></tr></table></figure><p>查看当前环境变量</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$PATH</span><br><span class="hljs-built_in">export</span> PATH=/opt/jdk-12.0.2/bin/:<span class="hljs-variable">$PATH</span><br></code></pre></td></tr></table></figure><p>关闭防火墙</p><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">systemctl stop firewalld<br></code></pre></td></tr></table></figure><p> build镜像过程中，查询详细信息<br> <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">docker</span> build --progress=plain -t solo:<span class="hljs-number">1</span>.<span class="hljs-number">0</span> .<br></code></pre></td></tr></table></figure></p><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p> dockerfile 中<br> <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;192.168.128.128 www.hcie.com&quot;</span> &gt;&gt; /etc/hosts</span><br></code></pre></td></tr></table></figure><br> 报错，readonly 写入报错</p>]]></content>
-    
-    
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>迁移</title>
-    <link href="/2025/%E8%BF%81%E7%A7%BB/"/>
-    <url>/2025/%E8%BF%81%E7%A7%BB/</url>
-    
-    <content type="html"><![CDATA[<p>文件级迁移 只迁移已又文件数据<br>块级迁移 全部迁移</p><p>启动绝对路径</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">java -<span class="hljs-built_in">cp</span> /opt/solo/lib/*:/opt/solo org.b3log.solo.Server<br><br><span class="hljs-comment"># 在solo目录下执行</span><br>java -<span class="hljs-built_in">cp</span> /opt/solo/lib/*:. org.b3log.solo.Server<br>java -<span class="hljs-built_in">cp</span> lib/*:. org.b3log.solo.Server<br></code></pre></td></tr></table></figure><p>lscpu 查看cpu核数<br>lsblk 查看磁盘<br>free -m 查看内存 </p><p>RUN echo “192.168.128.128 <a href="http://www.hcie.com/">www.hcie.com</a>“ &gt;&gt; &#x2F;etc&#x2F;hosts &amp;&amp; rm -rf &#x2F;etc&#x2F;yum.repos.d&#x2F;C* &amp;&amp; yum -y install unzip &amp;&amp; unzip -q &#x2F;opt&#x2F;solo&#x2F;solo-v4.4.0.zip -d &#x2F;opt&#x2F;solo&#x2F; &amp;&amp; rm -rf &#x2F;opt&#x2F;solo&#x2F;solo-v4.4.0.zip</p>]]></content>
-    
-    
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>wetdgsf</title>
-    <link href="/2025/wetdgsf/"/>
-    <url>/2025/wetdgsf/</url>
-    
-    <content type="html"><![CDATA[<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;wetdgsf&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>]]></content>
-    
-    
-    <categories>
-      
-      <category>测试分类</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>测试标签</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>myblot1</title>
-    <link href="/2025/myblot1/"/>
-    <url>/2025/myblot1/</url>
-    
-    <content type="html"><![CDATA[<h3 id="11"><a href="#11" class="headerlink" title="11"></a>11</h3><table><thead><tr><th>1</th><th>2</th></tr></thead><tbody><tr><td>3</td><td>4</td></tr><tr><td>7</td><td>8</td></tr></tbody></table>]]></content>
-    
-    
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>这是一篇新的博文</title>
     <link href="/2024/%E8%BF%99%E6%98%AF%E4%B8%80%E7%AF%87%E6%96%B0%E7%9A%84%E5%8D%9A%E6%96%87/"/>
     <url>/2024/%E8%BF%99%E6%98%AF%E4%B8%80%E7%AF%87%E6%96%B0%E7%9A%84%E5%8D%9A%E6%96%87/</url>
@@ -95,10 +18,10 @@
   
   <entry>
     <title>Hexo 命令</title>
-    <link href="/2024/hello-world/"/>
-    <url>/2024/hello-world/</url>
+    <link href="/2024/Hexo%20%E5%91%BD%E4%BB%A4/"/>
+    <url>/2024/Hexo%20%E5%91%BD%E4%BB%A4/</url>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><p>Hexo 框架可以帮助我们快速创建一个属于自己的博客网站，熟悉 Hexo 框架提供的命令有利于我们管理博客</p><h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><h3 id="hexo-init"><a href="#hexo-init" class="headerlink" title="hexo init"></a>hexo init</h3><p>hexo init 命令用于初始化本地文件夹为网站的根目录</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo init blog-demo<br></code></pre></td></tr></table></figure><h3 id="hexo-new"><a href="#hexo-new" class="headerlink" title="hexo new"></a>hexo new</h3><p>hexo new 命令用于创建一个新的文章，一般可以简写为 hexo n</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new [layout] &lt;title&gt;<br><br></code></pre></td></tr></table></figure><p>layout 可选参数，用以指定文章类型，若无指定则默认由配置文件中的 default_layout 选项决定</p><p>title 必填参数，用以指定文章标题，如果参数值中含有空格，则需要使用双引号包围</p><h3 id="hexo-generate"><a href="#hexo-generate" class="headerlink" title="hexo generate"></a>hexo generate</h3><p>hexo generate 命令用于生成静态文件，一般可以简写为 hexo g</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure><p>-d 选项，指定生成后部署，与 hexo d -g 等价<br>生成静态文件后，会在根目录下生成 public 文件夹，里面包含所有生成的静态文件</p><h3 id="创建新post"><a href="#创建新post" class="headerlink" title="创建新post"></a>创建新post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites-部署"><a href="#Deploy-to-remote-sites-部署" class="headerlink" title="Deploy to remote sites 部署"></a>Deploy to remote sites 部署</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br>$ hexo d<br></code></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<p>Hexo 框架可以帮助我们快速创建一个属于自己的博客网站，熟悉 Hexo 框架提供的命令有利于我们管理博客</p><h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><h3 id="hexo-init"><a href="#hexo-init" class="headerlink" title="hexo init"></a>hexo init</h3><p>hexo init 命令用于初始化本地文件夹为网站的根目录</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo init blog-demo<br></code></pre></td></tr></table></figure><h3 id="hexo-new"><a href="#hexo-new" class="headerlink" title="hexo new"></a>hexo new</h3><p>hexo new 命令用于创建一个新的文章，一般可以简写为 hexo n</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo new [layout] &lt;title&gt;<br></code></pre></td></tr></table></figure><p>layout 可选参数，用以指定文章类型，若无指定则默认由配置文件中的 default_layout 选项决定</p><p>title 必填参数，用以指定文章标题，如果参数值中含有空格，则需要使用双引号包围</p><h3 id="hexo-generate"><a href="#hexo-generate" class="headerlink" title="hexo generate"></a>hexo generate</h3><p>hexo generate 命令用于生成静态文件，一般可以简写为 hexo g</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo generate<br></code></pre></td></tr></table></figure><p>-d 选项，指定生成后部署，与 hexo d -g 等价<br>生成静态文件后，会在根目录下生成 public 文件夹，里面包含所有生成的静态文件</p><h3 id="hexo-server"><a href="#hexo-server" class="headerlink" title="hexo server"></a>hexo server</h3><p>hexo server 命令用于启动一个本地服务器，一般可以简写为 hexo s</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo server<br></code></pre></td></tr></table></figure><p>-p 选项，指定端口号<br>-i 选项，指定 IP 地址<br>-s 选项，静态模式 ，仅提供 public 文件夹中的文件并禁用文件监视</p><p>说明 ：运行服务器前需要安装 hexo-server 插件</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-server --save<br></code></pre></td></tr></table></figure><h3 id="hexo-deploy"><a href="#hexo-deploy" class="headerlink" title="hexo deploy"></a>hexo deploy</h3><p>hexo deploy 命令用于部署到远程服务器，一般可以简写为 hexo d</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo deploy<br></code></pre></td></tr></table></figure><p>说明 ：部署前需要修改 _config.yml 配置文件</p><h3 id="hexo-clean"><a href="#hexo-clean" class="headerlink" title="hexo clean"></a>hexo clean</h3><p>hexo clean 命令用于清理缓存文件，一般可以简写为 hexo c</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo clean<br></code></pre></td></tr></table></figure><h2 id="本地启动服务"><a href="#本地启动服务" class="headerlink" title="本地启动服务"></a>本地启动服务</h2><p>windows：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl; hexo s<br></code></pre></td></tr></table></figure><p>linux：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl &amp;&amp; hexo s<br></code></pre></td></tr></table></figure><h2 id="一键部署命令"><a href="#一键部署命令" class="headerlink" title="一键部署命令"></a>一键部署命令</h2><p>windows：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl; hexo g; hexo d<br></code></pre></td></tr></table></figure><p>linux：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl &amp;&amp; hexo g &amp;&amp; hexo d<br></code></pre></td></tr></table></figure><p>hexo clean：删除之前生成的文件，可以用hexo cl缩写。<br>hexo generate：生成静态文章，可以用hexo g缩写<br>hexo deploy：部署文章，可以用hexo d缩写</p><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://vercel.blog.cmliussss.com/p/HexoBlogNo1/">CM</a><br><a href="https://vercel.blog.cmliussss.com/p/HexoBlogNo2/">CM2</a></p>]]></content>
     
     
     
