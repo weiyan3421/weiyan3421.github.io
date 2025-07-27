@@ -1,0 +1,970 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lwy">
+  <meta name="keywords" content="数据分组与聚合">
+  
+    <meta name="description" content="数据分组与聚合，包括根据条件分组、对分组数据进行统计分析、对分组数据进行可视化等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.数据分组与聚合">
+<meta property="og:url" content="https://blog.wyyy.dpdns.org/2025/6-%E6%95%B0%E6%8D%AE%E5%88%86%E7%BB%84%E4%B8%8E%E8%81%9A%E5%90%88/index.html">
+<meta property="og:site_name" content="WyRecords">
+<meta property="og:description" content="数据分组与聚合，包括根据条件分组、对分组数据进行统计分析、对分组数据进行可视化等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-27T11:13:58.000Z">
+<meta property="article:modified_time" content="2025-07-27T11:17:50.322Z">
+<meta property="article:author" content="lwy">
+<meta property="article:tag" content="pandas">
+<meta property="article:tag" content="数据处理">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>6.数据分组与聚合 - WyRecords</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.wyyy.dpdns.org","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WyRecords</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="6.数据分组与聚合"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-07-27 19:13" pubdate>
+          星期日, 七月 27日 2025, 7:13 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">6.数据分组与聚合</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年7月27日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="初始化与加载数据"><a href="#初始化与加载数据" class="headerlink" title="初始化与加载数据"></a><strong>初始化与加载数据</strong></h3><p>首先，我们导入 <code>pandas</code> 库，并加载本次练习所需的数据集 <code>某招聘网站数据.csv</code>。题目要求对 <code>createTime</code> 列进行操作，所以在加载时使用 <code>parse_dates</code> 参数直接将其转换为日期时间类型，这是一个非常好的习惯。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np <span class="hljs-comment"># 导入numpy，后面聚合操作可能会用到</span><br><br><span class="hljs-comment"># 加载数据，并直接将 createTime 列解析为日期时间类型</span><br>df = pd.read_csv(<span class="hljs-string">&quot;某招聘网站数据.csv&quot;</span>, parse_dates=[<span class="hljs-string">&#x27;createTime&#x27;</span>])<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="分组"><a href="#分组" class="headerlink" title="分组"></a><strong>分组</strong></h2><p><code>groupby</code> 是 Pandas 数据分析的基石，它遵循“分割-应用-合并”（Split-Apply-Combine）的原则来对数据进行处理和分析。</p>
+<h3 id="1-分组统计｜均值"><a href="#1-分组统计｜均值" class="headerlink" title="1. 分组统计｜均值"></a><strong>1. 分组统计｜均值</strong></h3><ul>
+<li><strong>题目</strong>: 计算各区(<code>district</code>)的薪资(<code>salary</code>)均值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">mean_salary_by_district = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>)[<span class="hljs-string">&#x27;salary&#x27;</span>].mean()<br><span class="hljs-built_in">print</span>(mean_salary_by_district)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ol>
+<li><strong><code>df.groupby(&#39;district&#39;)</code></strong>: 这是“分割”步骤。Pandas 会根据 <code>district</code> 列中的唯一值（如’上城区’, ‘下沙’等）将整个 DataFrame 分割成多个子集（组）。</li>
+<li><strong><code>[&#39;salary&#39;]</code></strong>: 在分割后的每个组上，我们指定要操作的列是 <code>salary</code>。</li>
+<li><strong><code>.mean()</code></strong>: 这是“应用-合并”步骤。对每个组的 <code>salary</code> 列计算其均值（mean），然后将所有组的结果合并成一个新的 Series，其中索引就是分组的依据——各个区名。</li>
+</ol>
+</li>
+</ul>
+<h3 id="2-分组统计｜取消索引"><a href="#2-分组统计｜取消索引" class="headerlink" title="2. 分组统计｜取消索引"></a><strong>2. 分组统计｜取消索引</strong></h3><ul>
+<li><strong>题目</strong>: 重新按照上一题要求进行分组，但不使用 <code>district</code> 做为索引。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">mean_salary_no_index = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>, as_index=<span class="hljs-literal">False</span>)[<span class="hljs-string">&#x27;salary&#x27;</span>].mean()<br><span class="hljs-built_in">print</span>(mean_salary_no_index)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li><code>groupby</code> 函数有一个非常有用的参数 <code>as_index</code>。</li>
+<li>默认情况下 <code>as_index=True</code>，会将分组的键（这里是 <code>district</code>）作为结果的索引。</li>
+<li>当我们设置为 <strong><code>as_index=False</code></strong> 时，分组的键会保留为一个普通的列，而结果会使用一个从 0 开始的默认整数索引。这在后续需要将结果作为普通表格处理时非常方便。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-分组统计｜排序"><a href="#3-分组统计｜排序" class="headerlink" title="3. 分组统计｜排序"></a><strong>3. 分组统计｜排序</strong></h3><ul>
+<li><strong>题目</strong>: 计算并提取平均薪资最高的区。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">highest_salary_district = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>)[<span class="hljs-string">&#x27;salary&#x27;</span>].mean().sort_values(by=<span class="hljs-string">&#x27;salary&#x27;</span>, ascending=<span class="hljs-literal">False</span>).head(<span class="hljs-number">1</span>)<br><span class="hljs-built_in">print</span>(highest_salary_district)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li>这是一个链式操作，将多个步骤连接在一起：</li>
+</ul>
+<ol>
+<li><code>df.groupby(&#39;district&#39;)[&#39;salary&#39;].mean()</code>: 首先，像第一题一样计算出各区的平均薪资。</li>
+<li><strong><code>.sort_values(ascending=False)</code></strong>: 接着，对上一步得到的结果（一个以区名为索引的 Series）进行排序。<code>ascending=False</code> 表示<strong>降序</strong>排列，即薪资最高的区会排在最前面。</li>
+<li><strong><code>.head(1)</code></strong>: 最后，使用 <code>.head(1)</code> 提取排序后的第一行，即为平均薪资最高的那个区。</li>
+</ol>
+</li>
+</ul>
+<h3 id="4-分组统计｜频率"><a href="#4-分组统计｜频率" class="headerlink" title="4. 分组统计｜频率"></a><strong>4. 分组统计｜频率</strong></h3><ul>
+<li><strong>题目</strong>: 计算不同行政区(<code>district</code>)，不同规模公司(<code>companySize</code>)出现的次数。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">freq_by_dist_size = df.groupby([<span class="hljs-string">&#x27;district&#x27;</span>, <span class="hljs-string">&#x27;companySize&#x27;</span>]).size()<br><span class="hljs-built_in">print</span>(freq_by_dist_size)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ol>
+<li><strong><code>df.groupby([&#39;district&#39;, &#39;companySize&#39;])</code></strong>: 这里我们按<strong>多个列</strong>进行分组。只需将列名列表传给 <code>groupby</code> 即可。Pandas 会根据 <code>district</code> 和 <code>companySize</code> 的<strong>组合</strong>来创建分组。</li>
+<li><strong><code>.size()</code></strong>: 这是一个专门用于 <code>groupby</code> 对象的聚合函数，它会直接返回每个分组包含的<strong>行数（即频率）</strong>。这比 <code>.count()</code> 更直接，因为它不关心任何特定列的内容。</li>
+<li>结果的索引是一个**多级索引 (MultiIndex)**，由 <code>district</code> 和 <code>companySize</code> 两个层级构成。</li>
+</ol>
+</li>
+</ul>
+<h3 id="5-分组统计｜修改索引名"><a href="#5-分组统计｜修改索引名" class="headerlink" title="5. 分组统计｜修改索引名"></a><strong>5. 分组统计｜修改索引名</strong></h3><ul>
+<li><strong>题目</strong>: 将上一题的索引名修改为 <code>行政区</code> 和 <code>公司规模</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 先得到上一题的结果</span><br>freq_by_dist_size = df.groupby([<span class="hljs-string">&#x27;district&#x27;</span>, <span class="hljs-string">&#x27;companySize&#x27;</span>]).size()<br><br><span class="hljs-comment"># 修改索引名</span><br>freq_by_dist_size.index.names = [<span class="hljs-string">&#x27;行政区&#x27;</span>, <span class="hljs-string">&#x27;公司规模&#x27;</span>]<br><span class="hljs-built_in">print</span>(freq_by_dist_size)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li>对于一个带有索引的 Series 或 DataFrame，可以通过访问其 <code>.index.names</code> 属性来修改索引的名称。</li>
+<li>因为上一题的结果是多级索引，<code>.index.names</code> 是一个列表。我们直接将一个新的名称列表赋给它即可。</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-分组统计｜计数"><a href="#6-分组统计｜计数" class="headerlink" title="6. 分组统计｜计数"></a><strong>6. 分组统计｜计数</strong></h3><ul>
+<li><strong>题目</strong>: 计算上一题，每个区出现的公司数量。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 先得到第4题的结果</span><br>freq_by_dist_size = df.groupby([<span class="hljs-string">&#x27;district&#x27;</span>, <span class="hljs-string">&#x27;companySize&#x27;</span>]).size()<br><span class="hljs-comment"># 在多级索引上按第一层级(&#x27;district&#x27;)求和</span><br>count_by_district = freq_by_dist_size.groupby(level = <span class="hljs-string">&#x27;district&#x27;</span>).<span class="hljs-built_in">sum</span>()<br><span class="hljs-built_in">print</span>(count_by_district)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li>这个问题可以理解为：在第4题按“区-公司规模”分组计数的基础上，再按“区”进行一次聚合（求和）。</li>
+<li>对于一个多级索引的 Series，调用 <code>.sum()</code>、<code>.mean()</code> 等聚合函数时，可以通过 <code>level</code> 参数指定在哪一个索引层级上进行运算。这里 <code>level=&#39;district&#39;</code> 告诉 Pandas 沿着 <code>district</code> 这一层索引来求和。</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-分组查看｜全部"><a href="#7-分组查看｜全部" class="headerlink" title="7. 分组查看｜全部"></a><strong>7. 分组查看｜全部</strong></h3><ul>
+<li><strong>题目</strong>: 将数据按照 <code>district</code>、<code>salary</code> 进行分组，并查看各分组内容。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">grouped_obj = df.groupby([<span class="hljs-string">&#x27;district&#x27;</span>, <span class="hljs-string">&#x27;salary&#x27;</span>])<br><span class="hljs-built_in">print</span>(grouped_obj.groups)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li>当我们执行 <code>df.groupby(...)</code> 时，会创建一个 <code>DataFrameGroupBy</code> 对象。这个对象本身并不直接显示数据。</li>
+<li>想要查看分组情况，可以访问其 <code>.groups</code> 属性。</li>
+<li><code>.groups</code> 会返回一个字典，其中：<ul>
+<li><strong>键 (key)</strong> 是一个元组，代表分组的依据，例如 <code>(&#39;上城区&#39;, 22500)</code>。</li>
+<li><strong>值 (value)</strong> 是一个列表，包含了属于该分组的所有行的<strong>原始索引</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-分组查看｜指定"><a href="#8-分组查看｜指定" class="headerlink" title="8. 分组查看｜指定"></a><strong>8. 分组查看｜指定</strong></h3><ul>
+<li><strong>题目</strong>: 将数据按照 <code>district</code>、<code>salary</code> 进行分组，并查看西湖区薪资为 30000 的工作。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">grouped_obj = df.groupby([<span class="hljs-string">&#x27;district&#x27;</span>, <span class="hljs-string">&#x27;salary&#x27;</span>])<br>xihu_30k_jobs = grouped_obj.get_group((<span class="hljs-string">&#x27;西湖区&#x27;</span>, <span class="hljs-number">30000</span>))<br><span class="hljs-built_in">print</span>(xihu_30k_jobs)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li><code>.get_group()</code> 是从 <code>GroupBy</code> 对象中提取<strong>特定单个分组</strong>数据的方法。</li>
+<li>因为我们是按 <code>[&#39;district&#39;, &#39;salary&#39;]</code> 两个键分组的，所以需要向 <code>.get_group()</code> 传入一个<strong>元组 <code>(&#39;西湖区&#39;, 30000)</code></strong> 来指定想要查看的组。</li>
+<li>该方法会返回一个包含该组所有原始数据的完整 DataFrame。</li>
+</ul>
+</li>
+</ul>
+<h3 id="9-分组规则｜通过匿名函数1"><a href="#9-分组规则｜通过匿名函数1" class="headerlink" title="9. 分组规则｜通过匿名函数1"></a><strong>9. 分组规则｜通过匿名函数1</strong></h3><ul>
+<li><strong>题目</strong>: 根据 <code>createTime</code> 列，计算每天不同行政区新增的岗位数量。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">daily_district_counts = df.groupby([df[<span class="hljs-string">&#x27;createTime&#x27;</span>].dt.day, <span class="hljs-string">&#x27;district&#x27;</span>]).size().rename_axis([<span class="hljs-string">&#x27;发布日&#x27;</span>, <span class="hljs-string">&#x27;行政区&#x27;</span>])<br><span class="hljs-built_in">print</span>(daily_district_counts)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li><code>groupby</code> 的分组依据非常灵活，不一定非得是列名。它可以是一个与原 DataFrame 行数相同的<strong>数组或 Series</strong>。</li>
+</ul>
+<ol>
+<li><strong><code>df[&#39;createTime&#39;].dt.day</code></strong>: <code>.dt</code> 是处理日期时间类型列的访问器 (accessor)。<code>.dt.day</code> 会提取出 <code>createTime</code> 列中每一天的“日”部分（如16, 15, 14等），形成一个新的 Series。</li>
+<li><strong><code>df.groupby([..., &#39;district&#39;])</code></strong>: 我们将这个新生成的“日”Series和 <code>district</code> 列名一起放到一个列表中传给 <code>groupby</code>，实现按“日-区”的分组。</li>
+<li><strong><code>.size()</code></strong>: 统计每个“日-区”组合的岗位数。</li>
+<li><strong><code>.rename_axis(...)</code></strong>: 为了让结果更清晰，使用 <code>.rename_axis()</code> 给两个索引层级命名。</li>
+</ol>
+</li>
+</ul>
+<h3 id="10-分组规则｜通过匿名函数2"><a href="#10-分组规则｜通过匿名函数2" class="headerlink" title="10. 分组规则｜通过匿名函数2"></a><strong>10. 分组规则｜通过匿名函数2</strong></h3><ul>
+<li><strong>题目</strong>: 计算各行政区的企业领域（industryField）包含电商的总数。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">ecom_counts = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>)[<span class="hljs-string">&#x27;industryField&#x27;</span>].apply(<span class="hljs-keyword">lambda</span> x: x.<span class="hljs-built_in">str</span>.contains(<span class="hljs-string">&#x27;电商&#x27;</span>).<span class="hljs-built_in">sum</span>())<br><span class="hljs-built_in">print</span>(ecom_counts)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li><code>.apply()</code> 是 <code>groupby</code> 中最灵活的方法，它可以接收一个自定义函数（这里用 <code>lambda</code> 匿名函数）。</li>
+</ul>
+<ol>
+<li><code>df.groupby(&#39;district&#39;)[&#39;industryField&#39;]</code>: 首先，按区分组，并选取 <code>industryField</code> 列。</li>
+<li><strong><code>.apply(lambda x: ...)</code></strong>: <code>apply</code> 会将每个区的 <code>industryField</code> Series（记为 <code>x</code>）作为参数传递给 <code>lambda</code> 函数。</li>
+<li><strong><code>x.str.contains(&#39;电商&#39;)</code></strong>: 对每个组的 <code>industryField</code> 列（<code>x</code>），使用 <code>.str.contains(&#39;电商&#39;)</code> 判断每一行是否包含“电商”二字，返回一个布尔值的 Series（<code>True</code>&#x2F;<code>False</code>）。</li>
+<li><strong><code>.sum()</code></strong>: 对上一步的布尔 Series 求和。在求和运算中，<code>True</code> 被视为 1，<code>False</code> 被视为 0。因此，<code>.sum()</code> 的结果就是该区包含“电商”的岗位总数。</li>
+</ol>
+</li>
+</ul>
+<h3 id="11-分组规则｜通过内置函数"><a href="#11-分组规则｜通过内置函数" class="headerlink" title="11. 分组规则｜通过内置函数"></a><strong>11. 分组规则｜通过内置函数</strong></h3><ul>
+<li><strong>题目</strong>: 通过 <code>positionName</code> 的长度进行分组，并计算不同长度岗位名称的薪资均值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">salary_by_len = df.groupby(df[<span class="hljs-string">&#x27;positionName&#x27;</span>].<span class="hljs-built_in">str</span>.<span class="hljs-built_in">len</span>())[<span class="hljs-string">&#x27;salary&#x27;</span>].mean()<br><span class="hljs-built_in">print</span>(salary_by_len)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li>这与第9题类似，我们再次使用一个<strong>派生 Series</strong> 作为分组依据。</li>
+</ul>
+<ol>
+<li><strong><code>df[&#39;positionName&#39;].str.len()</code></strong>: <code>.str.len()</code> 会计算 <code>positionName</code> 列中每个字符串的长度，生成一个长度与原DataFrame相同的 Series。</li>
+<li><strong><code>df.groupby(...)</code></strong>: 使用这个长度 Series 作为 <code>groupby</code> 的键。</li>
+<li><strong><code>[&#39;salary&#39;].mean()</code></strong>: 对每个“岗位名长度”组，计算其对应薪资的平均值。</li>
+</ol>
+</li>
+</ul>
+<h3 id="12-分组规则｜通过字典"><a href="#12-分组规则｜通过字典" class="headerlink" title="12. 分组规则｜通过字典"></a><strong>12. 分组规则｜通过字典</strong></h3><ul>
+<li><strong>题目</strong>: 将 <code>score</code> 和 <code>matchScore</code> 的和记为总分，与 <code>salary</code> 列同时进行分组，并查看结果。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 定义分组映射规则的字典</span><br>mapping = &#123;<span class="hljs-string">&#x27;score&#x27;</span>: <span class="hljs-string">&#x27;总分&#x27;</span>, <span class="hljs-string">&#x27;matchScore&#x27;</span>: <span class="hljs-string">&#x27;总分&#x27;</span>, <span class="hljs-string">&#x27;salary&#x27;</span>: <span class="hljs-string">&#x27;薪资&#x27;</span>&#125;<br><span class="hljs-comment"># 按列名进行分组</span><br>grouped_by_dict = df.T.groupby(mapping).<span class="hljs-built_in">sum</span>().T<br><span class="hljs-built_in">print</span>(grouped_by_dict.<span class="hljs-built_in">sum</span>().head()) <span class="hljs-comment"># 以sum聚合为例查看结果</span><br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li><code>groupby</code> 不仅可以按行分组，也可以<strong>按列分组</strong>。通过设置 <code>axis=1</code> 来实现。</li>
+</ul>
+<ol>
+<li><strong><code>mapping = &#123;...&#125;</code></strong>: 我们创建一个字典。字典的 <code>key</code> 是原始的列名，<code>value</code> 是我们想把它们分到的组名。这里 <code>score</code> 和 <code>matchScore</code> 都被分到了“总分”组，<code>salary</code> 被分到了“薪资”组。</li>
+<li><strong><code>df.groupby(mapping, axis=1)</code></strong>: 将这个映射字典和 <code>axis=1</code> 传给 <code>groupby</code>。Pandas 就会按列进行分组。</li>
+<li><code>.sum()</code>: 在每个列分组上进行聚合操作，例如求和。结果中，“总分”这一列的值就是原 <code>score</code> 和 <code>matchScore</code> 的和。</li>
+</ol>
+</li>
+</ul>
+<h3 id="13-分组规则｜通过多列"><a href="#13-分组规则｜通过多列" class="headerlink" title="13. 分组规则｜通过多列"></a><strong>13. 分组规则｜通过多列</strong></h3><ul>
+<li><strong>题目</strong>: 计算不同 工作年限（<code>workYear</code>）和 学历（<code>education</code>）之间的薪资均值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">mean_salary_by_exp_edu = df.groupby([<span class="hljs-string">&#x27;workYear&#x27;</span>, <span class="hljs-string">&#x27;education&#x27;</span>])[<span class="hljs-string">&#x27;salary&#x27;</span>].mean()<br><span class="hljs-built_in">print</span>(mean_salary_by_exp_edu)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li>这与第4题是完全相同的逻辑，只是换了分组的列。</li>
+<li>通过向 <code>groupby</code> 传递一个包含多个列名的列表 <code>[&#39;workYear&#39;, &#39;education&#39;]</code>，即可实现按“工作年限-学历”这个组合进行分组，并计算每个组合的平均薪资。</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-分组转换｜transform"><a href="#14-分组转换｜transform" class="headerlink" title="14. 分组转换｜transform"></a><strong>14. 分组转换｜transform</strong></h3><ul>
+<li><strong>题目</strong>: 在原数据框 df 新增一列，数值为该区的平均薪资水平。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">df_transformed = df.copy() <span class="hljs-comment"># 创建副本进行操作</span><br>df_transformed[<span class="hljs-string">&#x27;区平均工资&#x27;</span>] = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>)[<span class="hljs-string">&#x27;salary&#x27;</span>].transform(<span class="hljs-string">&#x27;mean&#x27;</span>)<br><span class="hljs-built_in">print</span>(df_transformed[[<span class="hljs-string">&#x27;district&#x27;</span>, <span class="hljs-string">&#x27;salary&#x27;</span>, <span class="hljs-string">&#x27;区平均工资&#x27;</span>]].head())<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>解答过程</strong>:</li>
+<li><code>transform</code> 是 <code>groupby</code> 的一个非常强大的方法，它与 <code>agg</code>&#x2F;<code>apply</code> 的核心区别在于：<code>transform</code> <strong>返回一个与原始数据形状相同的 Series 或 DataFrame</strong>。</li>
+</ul>
+<ol>
+<li><code>df.groupby(&#39;district&#39;)[&#39;salary&#39;].transform(&#39;mean&#39;)</code>: 这个操作会先按区计算好每个区的平均薪资。</li>
+<li>然后，它会将计算出的平均值“广播”回原始的行。例如，所有 <code>district</code> 为“西湖区”的行，它们在新列中的值都会是同一个数字——“西湖区”的平均薪资。</li>
+<li>这使得我们可以直接将结果作为新列 <code>[&#39;区平均工资&#39;]</code> 添加回 DataFrame，用于后续的比较或计算。</li>
+</ol>
+</li>
+</ul>
+<h3 id="15-分组过滤｜filter"><a href="#15-分组过滤｜filter" class="headerlink" title="15. 分组过滤｜filter"></a><strong>15. 分组过滤｜filter</strong></h3><ul>
+<li><strong>题目</strong>: 提取平均工资小于 30000 的行政区的全部数据。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">filtered_districts = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>).<span class="hljs-built_in">filter</span>(<span class="hljs-keyword">lambda</span> x: x[<span class="hljs-string">&#x27;salary&#x27;</span>].mean() &lt; <span class="hljs-number">30000</span>)<br><span class="hljs-built_in">print</span>(filtered_districts.head())<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li><code>filter</code> 是另一个 <code>groupby</code> 的核心方法，用于<strong>按组的性质</strong>来筛选数据。</li>
+</ul>
+<ol>
+<li><strong><code>.filter(lambda x: ...)</code></strong>: <code>filter</code> 会将每个分组（一个子 DataFrame，记为 <code>x</code>）传递给 <code>lambda</code> 函数。</li>
+<li><strong><code>x[&#39;salary&#39;].mean() &lt; 30000</code></strong>: 这个函数必须返回一个布尔值（<code>True</code> 或 <code>False</code>）。这里我们计算每个组 <code>x</code> 的平均薪资，并判断是否小于 30000。</li>
+<li>如果函数返回 <code>True</code>，那么这个组的<strong>所有原始行</strong>都会被保留下来。</li>
+<li>如果函数返回 <code>False</code>，这个组的<strong>所有原始行</strong>都会被丢弃。</li>
+<li>最终，<code>filter</code> 会返回一个由所有被保留的组拼接而成的 DataFrame。</li>
+</ol>
+</li>
+</ul>
+<h3 id="16-分组可视化"><a href="#16-分组可视化" class="headerlink" title="16. 分组可视化"></a><strong>16. 分组可视化</strong></h3><ul>
+<li><strong>题目</strong>: 对杭州市各区公司数量进行分组，并使用柱状图进行可视化。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-comment"># 解决中文显示问题</span><br>plt.rcParams[<span class="hljs-string">&#x27;font.sans-serif&#x27;</span>] = [<span class="hljs-string">&#x27;SimHei&#x27;</span>]<br>plt.rcParams[<span class="hljs-string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="hljs-literal">False</span><br><br>district_counts = df[<span class="hljs-string">&#x27;district&#x27;</span>].value_counts()<br>district_counts.plot(kind=<span class="hljs-string">&#x27;bar&#x27;</span>, figsize=(<span class="hljs-number">12</span>, <span class="hljs-number">6</span>), title=<span class="hljs-string">&#x27;杭州市各区招聘岗位数量&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;岗位数量&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;行政区&#x27;</span>)<br>plt.xticks(rotation=<span class="hljs-number">45</span>)<br>plt.show()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ol>
+<li><strong><code>df[&#39;district&#39;].value_counts()</code></strong>: 这是统计各区出现次数（即岗位数量）最快的方法。它会返回一个按数量降序排列的 Series。</li>
+<li><strong><code>.plot(kind=&#39;bar&#39;, ...)</code></strong>: Pandas 的 Series 和 DataFrame 对象内置了 <code>.plot()</code> 方法，可以方便地快速绘图（底层是 Matplotlib）。</li>
+</ol>
+<ul>
+<li><code>kind=&#39;bar&#39;</code> 指定了图表类型为柱状图。</li>
+<li><code>figsize</code> 设置图表大小。</li>
+<li><code>title</code> 设置图表标题。</li>
+</ul>
+<ol start="3">
+<li><strong><code>plt.ylabel/xlabel/xticks</code></strong>: 使用 <code>matplotlib.pyplot</code> 的函数来进一步美化图表，如添加坐标轴标签、旋转x轴刻度标签以防重叠。</li>
+<li><strong><code>plt.show()</code></strong>: 显示图表。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a><strong>聚合</strong></h2><p>聚合（Aggregation）是指对分组后的数据进行汇总计算，如求和、求均值等。<code>.agg()</code> 是实现聚合操作最核心、最灵活的函数。</p>
+<h3 id="17-聚合统计"><a href="#17-聚合统计" class="headerlink" title="17. 聚合统计"></a><strong>17. 聚合统计</strong></h3><ul>
+<li><strong>题目</strong>: 分组计算不同行政区，薪水的最小值、最大值和平均值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">salary_stats = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>)[<span class="hljs-string">&#x27;salary&#x27;</span>].agg([<span class="hljs-string">&#x27;min&#x27;</span>, <span class="hljs-string">&#x27;max&#x27;</span>, <span class="hljs-string">&#x27;mean&#x27;</span>])<br><span class="hljs-built_in">print</span>(salary_stats)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li><strong><code>.agg()</code></strong>: 当你想对一个分组应用<strong>多个聚合函数</strong>时，<code>.agg()</code> 是最佳选择。</li>
+<li>将一个包含函数名称字符串的列表 <code>[&#39;min&#39;, &#39;max&#39;, &#39;mean&#39;]</code> 传递给 <code>.agg()</code>，它就会为每个区计算出这三个统计量，并生成一个以这些统计量名称为列名的 DataFrame。</li>
+</ul>
+</li>
+</ul>
+<h3 id="18-聚合统计｜修改列名"><a href="#18-聚合统计｜修改列名" class="headerlink" title="18. 聚合统计｜修改列名"></a><strong>18. 聚合统计｜修改列名</strong></h3><ul>
+<li><strong>题目</strong>: 将上一题的列名（包括索引名）修改为中文。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 先得到上一题的结果</span><br>salary_stats = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>)[<span class="hljs-string">&#x27;salary&#x27;</span>].agg([<span class="hljs-string">&#x27;min&#x27;</span>, <span class="hljs-string">&#x27;max&#x27;</span>, <span class="hljs-string">&#x27;mean&#x27;</span>])<br><span class="hljs-comment"># 使用 rename 方法修改</span><br>salary_stats_renamed = salary_stats.rename(<br>    columns=&#123;<span class="hljs-string">&#x27;min&#x27;</span>: <span class="hljs-string">&#x27;最低工资&#x27;</span>, <span class="hljs-string">&#x27;max&#x27;</span>: <span class="hljs-string">&#x27;最高工资&#x27;</span>, <span class="hljs-string">&#x27;mean&#x27;</span>: <span class="hljs-string">&#x27;平均工资&#x27;</span>&#125;,<br>    index=&#123;<span class="hljs-string">&#x27;district&#x27;</span>: <span class="hljs-string">&#x27;行政区&#x27;</span>&#125; <span class="hljs-comment"># rename也可以修改索引名</span><br>)<br>salary_stats_renamed.index.name = <span class="hljs-string">&#x27;行政区&#x27;</span> <span class="hljs-comment"># 或者用这种方式修改索引名</span><br><span class="hljs-built_in">print</span>(salary_stats_renamed)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li><code>rename()</code> 方法既可以修改列名（通过 <code>columns</code> 参数），也可以修改索引标签（通过 <code>index</code> 参数）。</li>
+<li>分别传入一个“原名:新名”的字典即可。</li>
+<li>对于索引名，也可以像第5题一样，通过 <code>.index.name</code> 属性直接赋值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="19-聚合统计｜组合"><a href="#19-聚合统计｜组合" class="headerlink" title="19. 聚合统计｜组合"></a><strong>19. 聚合统计｜组合</strong></h3><ul>
+<li><strong>题目</strong>: 对不同岗位(<code>positionName</code>)进行分组，并统计其薪水(<code>salary</code>)中位数和得分(<code>score</code>)均值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python">  position_stats = df.groupby(<span class="hljs-string">&#x27;positionName&#x27;</span>).agg(<br>      薪水中位数=(<span class="hljs-string">&#x27;salary&#x27;</span>, <span class="hljs-string">&#x27;median&#x27;</span>),<br>      得分均值=(<span class="hljs-string">&#x27;score&#x27;</span>, <span class="hljs-string">&#x27;mean&#x27;</span>)<br>  )<br>  <span class="hljs-built_in">print</span>(position_stats.head())<br>  ```- **解答过程**:<br>  - 这是 `.agg()` 最强大、最推荐的用法：**命名聚合 (Named Aggregation)**。<br>  - 语法是 `agg(新列名=(<span class="hljs-string">&#x27;操作的原始列&#x27;</span>, <span class="hljs-string">&#x27;聚合函数&#x27;</span>))`。<br>  - 这种方式可以一次性对**不同的列**应用**不同的聚合函数**，并且直接生成表意清晰的**新列名**，非常高效和优雅。<br><br><span class="hljs-comment">### **20. 聚合统计｜多层**</span><br>- **题目**: 对不同行政区进行分组，并统计薪水的均值、中位数、方差，以及得分的均值。<br>- **答案**:<br>  ```python<br>  district_multi_stats = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>).agg(&#123;<br>      <span class="hljs-string">&#x27;salary&#x27;</span>: [<span class="hljs-string">&#x27;mean&#x27;</span>, <span class="hljs-string">&#x27;median&#x27;</span>, <span class="hljs-string">&#x27;std&#x27;</span>],<br>      <span class="hljs-string">&#x27;score&#x27;</span>: <span class="hljs-string">&#x27;mean&#x27;</span><br>  &#125;)<br>  <span class="hljs-built_in">print</span>(district_multi_stats)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li>当需要对多个列应用不同的聚合函数组合时，可以向 <code>.agg()</code> 传递一个字典。</li>
+<li><strong>字典的键 (key)</strong> 是要操作的列名，如 <code>&#39;salary&#39;</code>。</li>
+<li><strong>字典的值 (value)</strong> 是要应用的聚合函数。如果对一列应用多个函数，值就是一个函数列表，如 <code>[&#39;mean&#39;, &#39;median&#39;, &#39;std&#39;]</code>；如果只应用一个，值就是函数名字符串，如 <code>&#39;mean&#39;</code>。</li>
+<li>结果会生成一个**多级列索引 (MultiIndex column)**。</li>
+</ul>
+</li>
+</ul>
+<h3 id="21-聚合统计｜自定义函数"><a href="#21-聚合统计｜自定义函数" class="headerlink" title="21. 聚合统计｜自定义函数"></a><strong>21. 聚合统计｜自定义函数</strong></h3><ul>
+<li><strong>题目</strong>: 在 18 题基础上，在聚合计算时新增一列计算最大值与平均值的差值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 定义一个自定义函数</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">max_mean_diff</span>(<span class="hljs-params">x</span>):<br>    <span class="hljs-keyword">return</span> x.<span class="hljs-built_in">max</span>() - x.mean()<br><br>salary_custom_agg = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>)[<span class="hljs-string">&#x27;salary&#x27;</span>].agg(<br>    最低工资=<span class="hljs-string">&#x27;min&#x27;</span>,<br>    最高工资=<span class="hljs-string">&#x27;max&#x27;</span>,<br>    平均工资=<span class="hljs-string">&#x27;mean&#x27;</span>,<br>    最大值与均值差值=max_mean_diff<br>)<br><span class="hljs-built_in">print</span>(salary_custom_agg)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解答过程</strong>:<ul>
+<li><code>.agg()</code> 不仅能接受内置的函数名字符串，还能接受<strong>用户自己定义的函数</strong>。</li>
+</ul>
+<ol>
+<li>我们先定义一个函数 <code>max_mean_diff</code>，它接收一个 Series (<code>x</code>)，并返回其最大值与平均值的差。</li>
+<li>在 <code>.agg()</code> 的命名聚合中，我们直接将这个<strong>函数对象</strong> <code>max_mean_diff</code> 作为聚合函数传入。Pandas 会自动将每个区的 <code>salary</code> Series 传给这个函数并计算结果。</li>
+<li>使用 <code>lambda</code> 匿名函数也可以实现同样的效果：<code>最大值与均值差值=lambda x: x.max() - x.mean()</code>。这使得 <code>.agg()</code> 的功能几乎是无限的。</li>
+</ol>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/pandas/" class="category-chain-item">pandas</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/pandas/" class="print-no-link">#pandas</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" class="print-no-link">#数据处理</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>6.数据分组与聚合</div>
+      <div>https://blog.wyyy.dpdns.org/2025/6-数据分组与聚合/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lwy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年7月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/5-%E6%95%B0%E6%8D%AE%E7%AD%9B%E9%80%89%E4%B8%8E%E4%BF%AE%E6%94%B9/" title="5.数据筛选与修改">
+                        <span class="hidden-mobile">5.数据筛选与修改</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

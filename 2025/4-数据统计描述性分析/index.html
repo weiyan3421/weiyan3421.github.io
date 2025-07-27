@@ -1,0 +1,919 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lwy">
+  <meta name="keywords" content="数据统计描述性分析">
+  
+    <meta name="description" content="数据统计描述性分析，包括查看数据基本信息、统计描述性指标、数据可视化等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.数据统计描述性分析">
+<meta property="og:url" content="https://blog.wyyy.dpdns.org/2025/4-%E6%95%B0%E6%8D%AE%E7%BB%9F%E8%AE%A1%E6%8F%8F%E8%BF%B0%E6%80%A7%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="WyRecords">
+<meta property="og:description" content="数据统计描述性分析，包括查看数据基本信息、统计描述性指标、数据可视化等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-27T11:11:52.000Z">
+<meta property="article:modified_time" content="2025-07-27T11:17:52.098Z">
+<meta property="article:author" content="lwy">
+<meta property="article:tag" content="pandas">
+<meta property="article:tag" content="数据处理">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>4.数据统计描述性分析 - WyRecords</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.wyyy.dpdns.org","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WyRecords</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="4.数据统计描述性分析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-07-27 19:11" pubdate>
+          星期日, 七月 27日 2025, 7:11 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">4.数据统计描述性分析</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年7月27日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="初始化与加载数据"><a href="#初始化与加载数据" class="headerlink" title="初始化与加载数据"></a><strong>初始化与加载数据</strong></h3><p>首先，我们导入 <code>pandas</code> 库，并加载本期练习所需的数据集 <code>2020年中国大学排名.xlsx</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><br><span class="hljs-comment"># 加载数据</span><br>df = pd.read_excel(<span class="hljs-string">&quot;2020年中国大学排名.xlsx&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="数据探索"><a href="#数据探索" class="headerlink" title="数据探索"></a><strong>数据探索</strong></h2><p>这部分将通过排序、统计和可视化等多种手段，对大学排名数据进行探索性分析。</p>
+<h3 id="1-查看数据"><a href="#1-查看数据" class="headerlink" title="1. 查看数据"></a><strong>1. 查看数据</strong></h3><ul>
+<li><strong>题目</strong>: 查看数据前 10 行。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df.head(<span class="hljs-number">10</span>)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>df.head(n)</code> 用于显示 DataFrame 的前 n 行，这里 <code>n=10</code>。这能帮助我们快速预览数据的主体内容和列名，对数据建立初步印象。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-修改索引"><a href="#2-修改索引" class="headerlink" title="2. 修改索引"></a><strong>2. 修改索引</strong></h3><ul>
+<li><strong>题目</strong>: 将索引修改为 学校名称 列。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df.set_index(<span class="hljs-string">&#x27;学校名称&#x27;</span>, inplace=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>set_index()</code> 方法可以将 DataFrame 的某一列或多列设置为新的行索引。</li>
+<li><code>inplace=True</code> 参数会<strong>直接在原始 DataFrame 上进行修改</strong>，而不会返回一个新的 DataFrame。这样做可以节省内存。修改后，我们就可以通过学校名称（如 <code>df.loc[&#39;清华大学&#39;]</code>）来直接访问数据行，更加直观。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-查看数据量"><a href="#3-查看数据量" class="headerlink" title="3. 查看数据量"></a><strong>3. 查看数据量</strong></h3><ul>
+<li><strong>题目</strong>: 计算数据框的 行 * 列，总共单元格的数量。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df.size<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>df.size</code> 属性返回 DataFrame 中元素的总数，即 <strong>行数 × 列数</strong>。这与返回 <code>(行数, 列数)</code> 元组的 <code>df.shape</code> 不同。<code>size</code> 告诉我们数据集中总共有多少个数据点。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-数据排序"><a href="#4-数据排序" class="headerlink" title="4. 数据排序"></a><strong>4. 数据排序</strong></h3><ul>
+<li><strong>题目</strong>: 将数据按照总分升序排列，并展示前20个学校（即倒数20名）。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df.sort_values(by=<span class="hljs-string">&#x27;总分&#x27;</span>, ascending=<span class="hljs-literal">True</span>).head(<span class="hljs-number">20</span>)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>sort_values()</code> 是用于排序的核心方法。</li>
+<li><code>by=&#39;总分&#39;</code> 指定了我们根据哪一列进行排序。</li>
+<li><code>ascending=True</code> 表示<strong>升序</strong>排列。默认值为 <code>True</code>，所以当需要升序时也可以省略。</li>
+<li><code>.head(20)</code> 链式调用，紧接着选取排序后结果的前 20 行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-数据排序"><a href="#5-数据排序" class="headerlink" title="5. 数据排序"></a><strong>5. 数据排序</strong></h3><ul>
+<li><strong>题目</strong>: 将数据按照 高端人才得分 降序排序，展示前 10 位。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df.sort_values(by=<span class="hljs-string">&#x27;高端人才得分&#x27;</span>, ascending=<span class="hljs-literal">False</span>).head(<span class="hljs-number">10</span>)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>与上一题类似，但 <code>ascending=False</code> 表示<strong>降序</strong>排列，即将分值高的排在前面。</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-分列排名"><a href="#6-分列排名" class="headerlink" title="6. 分列排名"></a><strong>6. 分列排名</strong></h3><ul>
+<li><strong>题目</strong>: 查看各项得分最高的学校名称。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 筛选出所有得分列</span><br>score_cols = df.columns[<span class="hljs-number">3</span>:]<br><span class="hljs-comment"># 使用 idxmax() 找到每列最大值对应的索引（即学校名称）</span><br>df[score_cols].idxmax()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>idxmax()</code> 是一个非常实用的函数，它会返回每列中<strong>最大值第一次出现的索引</strong>。因为我们已经将“学校名称”设置为了索引，所以结果直接就是学校的名字。这比先找到最大值再去找对应的学校要高效得多。</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-统计信息｜均值"><a href="#7-统计信息｜均值" class="headerlink" title="7. 统计信息｜均值"></a><strong>7. 统计信息｜均值</strong></h3><ul>
+<li><strong>题目</strong>: 计算总分列的均值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df[<span class="hljs-string">&#x27;总分&#x27;</span>].mean()<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>解释</strong>:</li>
+<li><code>.mean()</code> 方法用于计算 Series 或 DataFrame 列的算术平均值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-统计信息｜中位数"><a href="#8-统计信息｜中位数" class="headerlink" title="8. 统计信息｜中位数"></a><strong>8. 统计信息｜中位数</strong></h3><ul>
+<li><strong>题目</strong>: 计算总分列的中位数。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df[<span class="hljs-string">&#x27;总分&#x27;</span>].median()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>.median()</code> 方法用于计算中位数。中位数是将数据排序后位于中间位置的那个值，它比均值更能抵抗极端值（异常值）的影响。</li>
+</ul>
+</li>
+</ul>
+<h3 id="9-统计信息｜众数"><a href="#9-统计信息｜众数" class="headerlink" title="9. 统计信息｜众数"></a><strong>9. 统计信息｜众数</strong></h3><ul>
+<li><strong>题目</strong>: 计算总分列的众数。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df[<span class="hljs-string">&#x27;总分&#x27;</span>].mode()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>.mode()</code> 方法用于计算众数，即数据集中出现次数最多的那个值。</li>
+<li>注意它返回的是一个 <strong>Series</strong>，因为数据中可能存在多个众数（出现次数相同）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-统计信息｜部分"><a href="#10-统计信息｜部分" class="headerlink" title="10. 统计信息｜部分"></a><strong>10. 统计信息｜部分</strong></h3><ul>
+<li><strong>题目</strong>: 计算 总分、高端人才得分、办学层次得分的最大最小值、中位数、均值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">cols = [<span class="hljs-string">&#x27;总分&#x27;</span>, <span class="hljs-string">&#x27;高端人才得分&#x27;</span>, <span class="hljs-string">&#x27;办学层次得分&#x27;</span>]<br>stats_to_calc = [<span class="hljs-string">&#x27;max&#x27;</span>, <span class="hljs-string">&#x27;min&#x27;</span>, <span class="hljs-string">&#x27;median&#x27;</span>, <span class="hljs-string">&#x27;mean&#x27;</span>]<br>df[cols].agg(stats_to_calc)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>.agg()</code> (aggregate 的缩写) 是一个极其强大的函数，它允许你对指定的列同时应用<strong>一个或多个</strong>聚合函数。</li>
+<li>我们只需要将目标列和想计算的统计函数名称列表传入即可，代码非常整洁。</li>
+</ul>
+</li>
+</ul>
+<h3 id="11-统计信息｜完整"><a href="#11-统计信息｜完整" class="headerlink" title="11. 统计信息｜完整"></a><strong>11. 统计信息｜完整</strong></h3><ul>
+<li><strong>题目</strong>: 查看数值型数据的统计信息（均值、分位数等），并保留两位小数。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df.describe().<span class="hljs-built_in">round</span>(<span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>df.describe()</code> 我们在上一期已经学过，用于生成描述性统计摘要。</li>
+<li><code>.round(2)</code> 方法可以链式调用，将结果中的所有数值四舍五入到指定的小数位数（这里是两位），使输出更美观、易读。</li>
+</ul>
+</li>
+</ul>
+<h3 id="12-统计信息｜分组"><a href="#12-统计信息｜分组" class="headerlink" title="12. 统计信息｜分组"></a><strong>12. 统计信息｜分组</strong></h3><ul>
+<li><strong>题目</strong>: 计算各省市总分均值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df.groupby(<span class="hljs-string">&#x27;省市&#x27;</span>)[<span class="hljs-string">&#x27;总分&#x27;</span>].mean()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>groupby()</code> 是 Pandas 的核心功能之一，用于实现“<strong>分割-应用-合并</strong>” (Split-Apply-Combine) 的操作。</li>
+<li><code>df.groupby(&#39;省市&#39;)</code>: 首先根据“省市”列将数据分割成不同的组。</li>
+<li><code>[&#39;总分&#39;]</code>: 然后在每个组内，选取“总分”这一列。</li>
+<li><code>.mean()</code>: 最后对每个组的“总分”计算均值，并将结果合并成一个新的 Series。</li>
+</ul>
+</li>
+</ul>
+<h3 id="13-统计信息｜相关系数"><a href="#13-统计信息｜相关系数" class="headerlink" title="13. 统计信息｜相关系数"></a><strong>13. 统计信息｜相关系数</strong></h3><ul>
+<li><strong>题目</strong>: 计算相关系数矩阵。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df.corr()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>.corr()</code> 方法用于计算 DataFrame 中所有<strong>数值列</strong>两两之间的<strong>皮尔逊相关系数</strong>。</li>
+<li>结果是一个矩阵，对角线上的值恒为 1（自身与自身相关）。矩阵中的值范围在 -1 到 1 之间，表示两列数据的线性相关程度：<ul>
+<li>接近 1：强正相关（一列增加，另一列也倾向于增加）</li>
+<li>接近 -1：强负相关（一列增加，另一列倾向于减少）</li>
+<li>接近 0：无线性相关</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-相关系数｜热力图"><a href="#14-相关系数｜热力图" class="headerlink" title="14. 相关系数｜热力图"></a><strong>14. 相关系数｜热力图</strong></h3><ul>
+<li><strong>题目</strong>: 将上一题的相关性系数矩阵制作为热力图。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 需要先导入可视化库</span><br><span class="hljs-keyword">import</span> seaborn <span class="hljs-keyword">as</span> sns<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br><span class="hljs-comment"># 计算相关系数</span><br>correlation_matrix = df.corr()<br><br><span class="hljs-comment"># 绘制热力图</span><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>)) <span class="hljs-comment"># 设置画布大小</span><br>sns.heatmap(correlation_matrix, annot=<span class="hljs-literal">True</span>, cmap=<span class="hljs-string">&#x27;coolwarm&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>热力图是可视化相关系数矩阵的最佳方式。</li>
+<li><code>seaborn.heatmap()</code>:<ul>
+<li>第一个参数是数据，即我们的相关系数矩阵。</li>
+<li><code>annot=True</code>: 在每个格子上显示数值。</li>
+<li><code>cmap=&#39;coolwarm&#39;</code>: 指定颜色映射方案，正相关（红色）和负相关（蓝色）一目了然。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="15-统计信息｜频率"><a href="#15-统计信息｜频率" class="headerlink" title="15. 统计信息｜频率"></a><strong>15. 统计信息｜频率</strong></h3><ul>
+<li><strong>题目</strong>: 计算各省市出现的次数。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df[<span class="hljs-string">&#x27;省市&#x27;</span>].value_counts()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>.value_counts()</code> 是一个非常便捷的方法，用于统计一个 Series 中每个唯一值出现的次数，并按频率降序排列。</li>
+</ul>
+</li>
+</ul>
+<h3 id="16-统计信息｜热力地图"><a href="#16-统计信息｜热力地图" class="headerlink" title="16. 统计信息｜热力地图"></a><strong>16. 统计信息｜热力地图</strong></h3><ul>
+<li><strong>题目</strong>: 结合 <code>pyecharts</code> 将各省市高校上榜数量进行地图可视化。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 确保已安装 pyecharts: pip install pyecharts</span><br><span class="hljs-keyword">from</span> pyecharts <span class="hljs-keyword">import</span> options <span class="hljs-keyword">as</span> opts<br><span class="hljs-keyword">from</span> pyecharts.charts <span class="hljs-keyword">import</span> Map<br><br><span class="hljs-comment"># 1. 获取数据</span><br>province_counts = df[<span class="hljs-string">&#x27;省市&#x27;</span>].value_counts()<br><br><span class="hljs-comment"># 2. 准备 pyecharts 需要的数据格式：[(&#x27;省份&#x27;, 数量), ...]</span><br>data_list = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">zip</span>(province_counts.index, province_counts.values.astype(<span class="hljs-built_in">str</span>)))<br><br><span class="hljs-comment"># 3. 创建地图</span><br>c = (<br>    Map()<br>    .add(<span class="hljs-string">&quot;高校上榜数量&quot;</span>, data_list, <span class="hljs-string">&quot;china&quot;</span>)<br>    .set_global_opts(<br>        title_opts=opts.TitleOpts(title=<span class="hljs-string">&quot;各省市TOP500高校上榜数量&quot;</span>),<br>        visualmap_opts=opts.VisualMapOpts(max_=<span class="hljs-built_in">int</span>(province_counts.<span class="hljs-built_in">max</span>())),<br>    )<br>)<br><span class="hljs-comment"># 在 Jupyter Notebook 中可以直接显示</span><br>c.render_notebook()<br><span class="hljs-comment"># 或者保存为 html 文件</span><br><span class="hljs-comment"># c.render(&quot;university_distribution_map.html&quot;)</span><br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>Pyecharts 是一个用于生成交互式图表的强大库。</li>
+<li>这段代码首先获取省市的计数值，然后将其转换为 Pyecharts <code>Map</code> 图表需要的 <code>[(key, value), ...]</code> 格式。</li>
+<li><code>.add()</code> 方法将数据添加到地图上。</li>
+<li><code>.set_global_opts()</code> 用于设置图表的全局选项，如图表标题、视觉映射范围等。</li>
+</ul>
+</li>
+</ul>
+<h3 id="17-统计信息｜直方图"><a href="#17-统计信息｜直方图" class="headerlink" title="17. 统计信息｜直方图"></a><strong>17. 统计信息｜直方图</strong></h3><ul>
+<li><strong>题目</strong>: 绘制总分的直方图、密度估计图。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> seaborn <span class="hljs-keyword">as</span> sns<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br>sns.histplot(df[<span class="hljs-string">&#x27;总分&#x27;</span>], kde=<span class="hljs-literal">True</span>)<br>plt.title(<span class="hljs-string">&#x27;总分分布直方图&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>直方图是观察单个数值变量分布的绝佳工具。</li>
+<li><code>seaborn.histplot()</code>:<ul>
+<li>第一个参数是要绘制的数据列。</li>
+<li><code>kde=True</code>: (Kernel Density Estimate) 会在直方图上叠加一条平滑的<strong>核密度估计曲线</strong>，更清晰地展示数据分布的形状。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="2-个-pandas-EDA-插件"><a href="#2-个-pandas-EDA-插件" class="headerlink" title="2 个 pandas EDA 插件"></a><strong>2 个 pandas EDA 插件</strong></h2><p>除了手动一步步分析，社区也开发了一些强大的工具，可以一键生成详细的探索性数据分析（EDA）报告。</p>
+<h3 id="18-pandas-profiling"><a href="#18-pandas-profiling" class="headerlink" title="18. pandas_profiling"></a><strong>18. pandas_profiling</strong></h3><ul>
+<li><strong>解释</strong>:<ul>
+<li><code>pandas-profiling</code> (现在叫 <code>ydata-profiling</code>) 是一个能自动生成交互式 EDA 报告的库。报告内容极其详尽，包括每列的统计信息、分布图、相关性、缺失值分析等等。</li>
+</ul>
+</li>
+<li><strong>代码</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 如果未安装，先执行: !pip install ydata-profiling</span><br><span class="hljs-keyword">from</span> ydata_profiling <span class="hljs-keyword">import</span> ProfileReport<br><br>profile = ProfileReport(df, title=<span class="hljs-string">&quot;大学排名数据分析报告&quot;</span>)<br>profile <span class="hljs-comment"># 在 Jupyter Notebook 中，这行代码会自动渲染报告</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="19-sweetviz"><a href="#19-sweetviz" class="headerlink" title="19. sweetviz"></a><strong>19. sweetviz</strong></h3><ul>
+<li><strong>解释</strong>:<ul>
+<li><code>sweetviz</code> 是另一个自动化 EDA 工具，它的特点是能很方便地对两个数据集（例如训练集和测试集）进行对比分析。它生成的报告同样是交互式的 HTML 文件。</li>
+</ul>
+</li>
+<li><strong>代码</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 如果未安装，先执行: !pip install sweetviz</span><br><span class="hljs-keyword">import</span> sweetviz <span class="hljs-keyword">as</span> sv<br><br><span class="hljs-comment"># 分析数据集</span><br>report = sv.analyze(df)<br><br><span class="hljs-comment"># 在浏览器中显示报告</span><br>report.show_html(<span class="hljs-string">&#x27;sweetviz_report.html&#x27;</span>)<br></code></pre></td></tr></table></figure></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/pandas/" class="category-chain-item">pandas</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/pandas/" class="print-no-link">#pandas</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" class="print-no-link">#数据处理</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>4.数据统计描述性分析</div>
+      <div>https://blog.wyyy.dpdns.org/2025/4-数据统计描述性分析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lwy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年7月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/5-%E6%95%B0%E6%8D%AE%E7%AD%9B%E9%80%89%E4%B8%8E%E4%BF%AE%E6%94%B9/" title="5.数据筛选与修改">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">5.数据筛选与修改</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/3-%E6%95%B0%E6%8D%AE%E9%A2%84%E8%A7%88%E4%B8%8E%E9%A2%84%E5%A4%84%E7%90%86/" title="3.数据预览与预处理">
+                        <span class="hidden-mobile">3.数据预览与预处理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

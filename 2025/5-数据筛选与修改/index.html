@@ -1,0 +1,1083 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lwy">
+  <meta name="keywords" content="数据筛选与修改">
+  
+    <meta name="description" content="数据筛选与修改，包括根据条件筛选数据、修改数据值、修改索引等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5.数据筛选与修改">
+<meta property="og:url" content="https://blog.wyyy.dpdns.org/2025/5-%E6%95%B0%E6%8D%AE%E7%AD%9B%E9%80%89%E4%B8%8E%E4%BF%AE%E6%94%B9/index.html">
+<meta property="og:site_name" content="WyRecords">
+<meta property="og:description" content="数据筛选与修改，包括根据条件筛选数据、修改数据值、修改索引等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-27T11:12:39.000Z">
+<meta property="article:modified_time" content="2025-07-27T11:17:51.211Z">
+<meta property="article:author" content="lwy">
+<meta property="article:tag" content="pandas">
+<meta property="article:tag" content="数据处理">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>5.数据筛选与修改 - WyRecords</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.wyyy.dpdns.org","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WyRecords</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="5.数据筛选与修改"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-07-27 19:12" pubdate>
+          星期日, 七月 27日 2025, 7:12 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">5.数据筛选与修改</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年7月27日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="初始化与加载数据"><a href="#初始化与加载数据" class="headerlink" title="初始化与加载数据"></a><strong>初始化与加载数据</strong></h3><p>首先，我们导入 <code>pandas</code> 并加载东京奥运会的奖牌数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np <span class="hljs-comment"># 导入numpy，后面会用到</span><br><br><span class="hljs-comment"># 从网页直接读取数据，Pandas会自动抓取页面上的表格</span><br><span class="hljs-comment"># read_html返回一个列表，我们取第一个表格[0]</span><br>df = pd.read_html(<span class="hljs-string">&quot;https://olympics.com/tokyo-2020/olympic-games/zh/results/all-sports/medal-standings.htm&quot;</span>)[<span class="hljs-number">0</span>]<br><br><span class="hljs-comment"># 如果网络不稳定，也可以加载本地文件</span><br><span class="hljs-comment"># df = pd.read_csv(&quot;东京奥运会奖牌数据.csv&quot;)</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-1-数据修改"><a href="#5-1-数据修改" class="headerlink" title="5-1 数据修改"></a><strong>5-1 数据修改</strong></h2><h3 id="1-数据修改｜列名"><a href="#1-数据修改｜列名" class="headerlink" title="1. 数据修改｜列名"></a><strong>1. 数据修改｜列名</strong></h3><ul>
+<li><strong>题目</strong>: 将原 <code>df</code> 列名 <code>Unnamed: 2</code>、<code>Unnamed: 3</code>、<code>Unnamed: 4</code> 修改为 <code>金牌数</code>、<code>银牌数</code>、<code>铜牌数</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">df_renamed = df.rename(columns=&#123;<span class="hljs-string">&#x27;Unnamed: 2&#x27;</span>: <span class="hljs-string">&#x27;金牌数&#x27;</span>,<br>                                <span class="hljs-string">&#x27;Unnamed: 3&#x27;</span>: <span class="hljs-string">&#x27;银牌数&#x27;</span>,<br>                                <span class="hljs-string">&#x27;Unnamed: 4&#x27;</span>: <span class="hljs-string">&#x27;铜牌数&#x27;</span>&#125;)<br><span class="hljs-comment"># 查看修改后的前几行</span><br>df_renamed.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>rename()</code> 是用于修改轴标签（行索引或列名）的函数。</li>
+<li><code>columns=&#123;...&#125;</code> 参数接收一个字典，<code>key</code> 是原始列名，<code>value</code> 是你想要的新列名。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-数据修改｜行索引"><a href="#2-数据修改｜行索引" class="headerlink" title="2. 数据修改｜行索引"></a><strong>2. 数据修改｜行索引</strong></h3><ul>
+<li><strong>题目</strong>: 将第一列（排名）设置为索引。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 在上一步重命名后的df_renamed上操作</span><br>df_indexed = df_renamed.set_index(<span class="hljs-string">&#x27;排名&#x27;</span>)<br>df_indexed.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>set_index()</code> 方法可以将 DataFrame 的某一列或多列设置为新的行索引。这在后续使用 <code>.loc</code> 按标签查找时非常方便。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-数据修改｜修改索引名"><a href="#3-数据修改｜修改索引名" class="headerlink" title="3. 数据修改｜修改索引名"></a><strong>3. 数据修改｜修改索引名</strong></h3><ul>
+<li><strong>题目</strong>: 修改索引名为 金牌排名。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 同样在上一步的结果上操作</span><br>df_named_index = df_indexed.copy() <span class="hljs-comment"># 创建副本以避免修改df_indexed</span><br>df_named_index.index.name = <span class="hljs-string">&#x27;金牌排名&#x27;</span><br>df_named_index.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>通过访问 <code>df.index.name</code> 属性，可以直接为其赋值，从而修改索引的名称。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-数据修改｜修改值"><a href="#4-数据修改｜修改值" class="headerlink" title="4. 数据修改｜修改值"></a><strong>4. 数据修改｜修改值</strong></h3><ul>
+<li><strong>题目</strong>: 将 ROC（第一列第五行）修改为 俄奥委会。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">df_modified_value = df_named_index.copy()<br><span class="hljs-comment"># 使用 .loc[行标签, 列标签] 定位并修改</span><br>df_modified_value.loc[<span class="hljs-number">5</span>, <span class="hljs-string">&#x27;国家奥委会&#x27;</span>] = <span class="hljs-string">&#x27;俄奥委会&#x27;</span><br>df_modified_value.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>.loc</code> 是基于<strong>标签</strong>进行索引的，是我们修改值的首选方法。<code>df.loc[行标签, 列标签] = 新值</code> 可以精确地定位到单元格并赋予新值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-数据修改｜替换值（单值）"><a href="#5-数据修改｜替换值（单值）" class="headerlink" title="5. 数据修改｜替换值（单值）"></a><strong>5. 数据修改｜替换值（单值）</strong></h3><ul>
+<li><strong>题目</strong>: 将金牌数列的数字 <code>0</code> 替换为 <code>无</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 创建一个副本进行操作</span><br>df_replaced = df_modified_value.copy()<br>df_replaced[<span class="hljs-string">&#x27;金牌数&#x27;</span>] = df_replaced[<span class="hljs-string">&#x27;金牌数&#x27;</span>].replace(<span class="hljs-number">0</span>, <span class="hljs-string">&#x27;无&#x27;</span>)<br>df_replaced.tail() <span class="hljs-comment"># 查看尾部数据确认替换</span><br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>replace()</code> 方法可以替换 Series 或 DataFrame 中的值。<code>replace(要被替换的值, 新值)</code> 是其基本用法。</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-数据修改｜替换值（多值）"><a href="#6-数据修改｜替换值（多值）" class="headerlink" title="6. 数据修改｜替换值（多值）"></a><strong>6. 数据修改｜替换值（多值）</strong></h3><ul>
+<li><strong>题目</strong>: 同时替换，将 <code>无</code> 替换为缺失值，将 <code>0</code> 替换为 <code>None</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用上一步的 df_replaced 进行操作</span><br>df_multi_replaced = df_replaced.replace(&#123;<span class="hljs-string">&#x27;无&#x27;</span>: np.nan, <span class="hljs-number">0</span>: <span class="hljs-literal">None</span>&#125;)<br>df_multi_replaced.tail()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>replace()</code> 也可以接收一个字典来进行多值替换。<code>key</code> 是待替换的值，<code>value</code> 是新值。</li>
+<li><code>np.nan</code> 是 <code>NumPy</code> 库中表示标准缺失值的对象 (Not a Number)。Pandas 中 <code>None</code> 也会被视作缺失值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-数据查看"><a href="#7-数据查看" class="headerlink" title="7. 数据查看"></a><strong>7. 数据查看</strong></h3><ul>
+<li><strong>题目</strong>: 查看各列数据类型。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">df_multi_replaced.dtypes<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>.dtypes</code> 属性可以快速返回 DataFrame 中每一列的数据类型。</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-数据修改｜修改类型"><a href="#8-数据修改｜修改类型" class="headerlink" title="8. 数据修改｜修改类型"></a><strong>8. 数据修改｜修改类型</strong></h3><ul>
+<li><strong>题目</strong>: 将 <code>金牌数</code> 列类型修改为 <code>int</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#  由于上一步我们引入了np.nan(浮点型)，直接转int会报错</span><br><span class="hljs-comment">#  需要先填充缺失值</span><br>df_temp = df_multi_replaced.copy()<br>df_temp[<span class="hljs-string">&#x27;金牌数&#x27;</span>] = df_temp[<span class="hljs-string">&#x27;金牌数&#x27;</span>].fillna(<span class="hljs-number">0</span>) <span class="hljs-comment"># 将缺失值填充为0</span><br><br><span class="hljs-comment"># 现在可以安全地转换类型了</span><br>df_temp[<span class="hljs-string">&#x27;金牌数&#x27;</span>] = df_temp[<span class="hljs-string">&#x27;金牌数&#x27;</span>].astype(<span class="hljs-built_in">int</span>)<br><span class="hljs-built_in">print</span>(df_temp.dtypes)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>.astype()</code> 是转换数据类型的核心方法。</li>
+<li><strong>注意</strong>：标准的 <code>int</code> 类型不支持缺失值 <code>np.nan</code>。在转换前，必须确保该列不含缺失值（可以填充或删除）。如果你想保留缺失值的同时使用整数类型，可以使用 Pandas 提供的 nullable integer 类型：<code>astype(&#39;Int64&#39;)</code>（注意大写的’I’）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="9-数据增加｜新增列（固定值）"><a href="#9-数据增加｜新增列（固定值）" class="headerlink" title="9. 数据增加｜新增列（固定值）"></a><strong>9. 数据增加｜新增列（固定值）</strong></h3><ul>
+<li><strong>题目</strong>: <strong>重新加载数据</strong> 并 新增一列 <code>比赛地点</code>，值为 <code>东京</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 重新加载并重命名</span><br>df_reloaded = df.rename(columns=&#123;<span class="hljs-string">&#x27;Unnamed: 2&#x27;</span>: <span class="hljs-string">&#x27;金牌数&#x27;</span>, <span class="hljs-string">&#x27;Unnamed: 3&#x27;</span>: <span class="hljs-string">&#x27;银牌数&#x27;</span>, <span class="hljs-string">&#x27;Unnamed: 4&#x27;</span>: <span class="hljs-string">&#x27;铜牌数&#x27;</span>&#125;)<br><br>df_new_col = df_reloaded.copy()<br>df_new_col[<span class="hljs-string">&#x27;比赛地点&#x27;</span>] = <span class="hljs-string">&#x27;东京&#x27;</span><br>df_new_col.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>新增一列最简单的方法就是像字典一样直接赋值：<code>df[&#39;新列名&#39;] = 值</code>。Pandas 会自动将这个值广播到每一行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-数据增加｜新增列（计算值）"><a href="#10-数据增加｜新增列（计算值）" class="headerlink" title="10. 数据增加｜新增列（计算值）"></a><strong>10. 数据增加｜新增列（计算值）</strong></h3><ul>
+<li><strong>题目</strong>: 新增一列 <code>金银牌总数</code> 列，值为该国家金银牌总数。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">df_calc_col = df_new_col.copy()<br>df_calc_col[<span class="hljs-string">&#x27;金银牌总数&#x27;</span>] = df_calc_col[<span class="hljs-string">&#x27;金牌数&#x27;</span>] + df_calc_col[<span class="hljs-string">&#x27;银牌数&#x27;</span>]<br>df_calc_col.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>新增的列可以是现有列之间计算的结果。Pandas 支持列与列之间的向量化运算，非常高效。</li>
+</ul>
+</li>
+</ul>
+<h3 id="11-数据增加｜新增列（比较值）"><a href="#11-数据增加｜新增列（比较值）" class="headerlink" title="11. 数据增加｜新增列（比较值）"></a><strong>11. 数据增加｜新增列（比较值）</strong></h3><ul>
+<li><strong>题目</strong>: 新增一列 <code>最多奖牌数量</code> 列，值为该过金银牌数量种最多的一个奖牌数量。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">df_max_col = df_calc_col.copy()<br>df_max_col[<span class="hljs-string">&#x27;最多奖牌数量&#x27;</span>] = df_max_col[[<span class="hljs-string">&#x27;金牌数&#x27;</span>, <span class="hljs-string">&#x27;银牌数&#x27;</span>, <span class="hljs-string">&#x27;铜牌数&#x27;</span>]].<span class="hljs-built_in">max</span>(axis=<span class="hljs-number">1</span>)<br>df_max_col.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>.max()</code> 方法可以求最大值。当应用于多列组成的 DataFrame 时，<code>axis=1</code> 参数表示<strong>按行操作</strong>，即计算每一行中指定列的最大值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="12-数据增加｜新增列（判断值）"><a href="#12-数据增加｜新增列（判断值）" class="headerlink" title="12. 数据增加｜新增列（判断值）"></a><strong>12. 数据增加｜新增列（判断值）</strong></h3><ul>
+<li><strong>题目</strong>: 新增一列 <code>金牌大于30</code>，如果金牌数大于 30 则值为 <code>是</code>，反之为 <code>否</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">df_cond_col = df_max_col.copy()<br>df_cond_col[<span class="hljs-string">&#x27;金牌大于30&#x27;</span>] = np.where(df_cond_col[<span class="hljs-string">&#x27;金牌数&#x27;</span>] &gt; <span class="hljs-number">30</span>, <span class="hljs-string">&#x27;是&#x27;</span>, <span class="hljs-string">&#x27;否&#x27;</span>)<br>df_cond_col.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>np.where(condition, value_if_true, value_if_false)</code> 是实现条件赋值的绝佳工具。它会根据 <code>condition</code> 的布尔结果，从后面两个参数中选择对应的值，效率远高于 <code>.apply</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="13-数据增加｜增加多列"><a href="#13-数据增加｜增加多列" class="headerlink" title="13. 数据增加｜增加多列"></a><strong>13. 数据增加｜增加多列</strong></h3><ul>
+<li><strong>题目</strong>: 新增 <code>金铜牌总数</code> 和 <code>银铜牌总数</code> 两列。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">df_multi_add = df_cond_col.copy()<br>df_assigned = df_multi_add.assign(<br>    金铜牌总数 = df_multi_add[<span class="hljs-string">&#x27;金牌数&#x27;</span>] + df_multi_add[<span class="hljs-string">&#x27;铜牌数&#x27;</span>],<br>    银铜牌总数 = df_multi_add[<span class="hljs-string">&#x27;银牌数&#x27;</span>] + df_multi_add[<span class="hljs-string">&#x27;铜牌数&#x27;</span>]<br>)<br>df_assigned.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>assign()</code> 方法允许链式调用，一次性创建多个新列，代码更整洁。它会返回一个包含新列的<strong>新</strong> DataFrame。</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-数据增加｜新增列（引用变量）"><a href="#14-数据增加｜新增列（引用变量）" class="headerlink" title="14. 数据增加｜新增列（引用变量）"></a><strong>14. 数据增加｜新增列（引用变量）</strong></h3><ul>
+<li><strong>题目</strong>: 新增一列 <code>金牌占比</code>，为各国金牌数除以总金牌数。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 先计算总金牌数</span><br>gold_sum = df_assigned[<span class="hljs-string">&#x27;金牌数&#x27;</span>].<span class="hljs-built_in">sum</span>()<br><br><span class="hljs-comment"># 再计算占比</span><br>df_ratio = df_assigned.copy()<br>df_ratio[<span class="hljs-string">&#x27;金牌占比&#x27;</span>] = df_ratio[<span class="hljs-string">&#x27;金牌数&#x27;</span>] / gold_sum<br>df_ratio.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>新增列的计算过程可以引用外部变量（如 <code>gold_sum</code>），这在进行标准化或计算占比等场景中非常常见。</li>
+</ul>
+</li>
+</ul>
+<h3 id="15-数据增加｜新增行（末尾追加）"><a href="#15-数据增加｜新增行（末尾追加）" class="headerlink" title="15. 数据增加｜新增行（末尾追加）"></a><strong>15. 数据增加｜新增行（末尾追加）</strong></h3><ul>
+<li><strong>题目</strong>: 在 df 末尾追加一行，内容为 0,1,2,3…</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 创建新行的数据</span><br>new_row_data = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">range</span>(df_ratio.shape[<span class="hljs-number">1</span>]))<br><span class="hljs-comment"># 将新行包装成一个DataFrame</span><br>new_row_df = pd.DataFrame([new_row_data], columns=df_ratio.columns)<br><br><span class="hljs-comment"># 使用pd.concat合并</span><br>df_appended = pd.concat([df_ratio, new_row_df], ignore_index=<span class="hljs-literal">True</span>)<br>df_appended.tail()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>自 Pandas 2.0 起，官方推荐使用 <code>pd.concat</code> 来合并 DataFrame，以取代已弃用的 <code>append</code> 方法。</li>
+<li><code>ignore_index=True</code> 会创建一个新的、从0开始的连续索引。</li>
+</ul>
+</li>
+</ul>
+<h3 id="16-数据增加｜新增行（指定位置）"><a href="#16-数据增加｜新增行（指定位置）" class="headerlink" title="16. 数据增加｜新增行（指定位置）"></a><strong>16. 数据增加｜新增行（指定位置）</strong></h3><ul>
+<li><strong>题目</strong>: 在第 2 行（美国和中国之间）新增一行数据。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 定义新行</span><br>new_row_df = pd.DataFrame([<span class="hljs-built_in">list</span>(<span class="hljs-built_in">range</span>(df_ratio.shape[<span class="hljs-number">1</span>]))], columns=df_ratio.columns)<br><br><span class="hljs-comment"># 将原DataFrame拆分为上下两部分</span><br>df_top = df_ratio.iloc[:<span class="hljs-number">2</span>]<br>df_bottom = df_ratio.iloc[<span class="hljs-number">2</span>:]<br><br><span class="hljs-comment"># 按顺序合并</span><br>df_inserted = pd.concat([df_top, new_row_df, df_bottom], ignore_index=<span class="hljs-literal">True</span>)<br>df_inserted.head(<span class="hljs-number">4</span>)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>在 DataFrame 中间插入行的标准做法是将其“切开”，然后将顶部、新行、底部按顺序用 <code>pd.concat</code> “粘合”起来。</li>
+</ul>
+</li>
+</ul>
+<h3 id="17-数据删除｜删除行"><a href="#17-数据删除｜删除行" class="headerlink" title="17. 数据删除｜删除行"></a><strong>17. 数据删除｜删除行</strong></h3><ul>
+<li><strong>题目</strong>: 删除 <code>df</code> 第一行。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用插入后的df_inserted</span><br>df_dropped_row = df_inserted.drop(index=<span class="hljs-number">0</span>)<br>df_dropped_row.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>drop()</code> 是通用的删除函数。<code>index=...</code> 参数用于指定要删除的行的索引标签。</li>
+</ul>
+</li>
+</ul>
+<h3 id="18-数据删除｜删除行（条件）"><a href="#18-数据删除｜删除行（条件）" class="headerlink" title="18. 数据删除｜删除行（条件）"></a><strong>18. 数据删除｜删除行（条件）</strong></h3><ul>
+<li><strong>题目</strong>: 删除金牌数为 0 的所有行。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 先筛选出金牌数为0的行的索引</span><br>indices_to_drop = df_dropped_row[df_dropped_row[<span class="hljs-string">&#x27;金牌数&#x27;</span>] == <span class="hljs-number">0</span>].index<br><br><span class="hljs-comment"># 再根据索引删除</span><br>df_dropped_cond = df_dropped_row.drop(index=indices_to_drop)<br>df_dropped_cond.tail()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>条件删除通常分两步：1. 根据你的条件找到需要删除的行的索引。2. 将这些索引用 <code>drop()</code> 方法删除。</li>
+</ul>
+</li>
+</ul>
+<h3 id="19-数据删除｜删除列"><a href="#19-数据删除｜删除列" class="headerlink" title="19. 数据删除｜删除列"></a><strong>19. 数据删除｜删除列</strong></h3><ul>
+<li><strong>题目</strong>: 删除刚刚新增的 <code>比赛地点</code> 列。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用上一个结果</span><br>df_dropped_col = df_dropped_cond.drop(columns=[<span class="hljs-string">&#x27;比赛地点&#x27;</span>])<br>df_dropped_col.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>drop()</code> 方法的 <code>columns=...</code> 参数用于指定要删除的列的名称。</li>
+</ul>
+</li>
+</ul>
+<h3 id="20-数据删除｜删除列（按列号）"><a href="#20-数据删除｜删除列（按列号）" class="headerlink" title="20. 数据删除｜删除列（按列号）"></a><strong>20. 数据删除｜删除列（按列号）</strong></h3><ul>
+<li><strong>题目</strong>: 删除 <code>df</code> 的 <code>7、8、9、10</code> 列。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">cols_to_drop = df_dropped_col.columns[[<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>]]<br>df_dropped_by_pos = df_dropped_col.drop(columns=cols_to_drop)<br>df_dropped_by_pos.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>drop</code> 不直接支持按列号删除。你需要先通过 <code>df.columns[...]</code> 按位置获取列名，然后再按列名删除。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="5-2-数据筛选"><a href="#5-2-数据筛选" class="headerlink" title="5-2 数据筛选"></a><strong>5-2 数据筛选</strong></h2><h3 id="21-重新加载数据"><a href="#21-重新加载数据" class="headerlink" title="21. 重新加载数据"></a><strong>21. 重新加载数据</strong></h3><ul>
+<li><strong>操作</strong>: 为了这部分的练习，我们重新加载一份干净的数据。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df = pd.read_html(<span class="hljs-string">&quot;https://olympics.com/tokyo-2020/olympic-games/zh/results/all-sports/medal-standings.htm&quot;</span>)[<span class="hljs-number">0</span>]<br>df.rename(columns=&#123;<span class="hljs-string">&#x27;Unnamed: 2&#x27;</span>:<span class="hljs-string">&#x27;金牌数&#x27;</span>,<span class="hljs-string">&#x27;Unnamed: 3&#x27;</span>:<span class="hljs-string">&#x27;银牌数&#x27;</span>,<span class="hljs-string">&#x27;Unnamed: 4&#x27;</span>:<span class="hljs-string">&#x27;铜牌数&#x27;</span>&#125;, inplace=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
+<strong>注意</strong>: 以下操作均基于这份新加载的 <code>df</code>。</li>
+</ul>
+<h3 id="22-筛选列｜通过列号"><a href="#22-筛选列｜通过列号" class="headerlink" title="22. 筛选列｜通过列号"></a><strong>22. 筛选列｜通过列号</strong></h3><ul>
+<li><strong>题目</strong>: 提取第 1、2、3、4 列。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_selected_cols = df.iloc[:, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]]<br>df_selected_cols.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>iloc</code> 是基于<strong>整数位置</strong>进行索引的。<code>:</code> 表示选择所有行，<code>[0, 1, 2, 3]</code> 表示选择指定的列。</li>
+</ul>
+</li>
+</ul>
+<h3 id="23-筛选列｜通过列名"><a href="#23-筛选列｜通过列名" class="headerlink" title="23. 筛选列｜通过列名"></a><strong>23. 筛选列｜通过列名</strong></h3><ul>
+<li><strong>题目</strong>: 提取 <code>金牌数、银牌数、铜牌数</code> 三列。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_selected_names = df[[<span class="hljs-string">&#x27;金牌数&#x27;</span>, <span class="hljs-string">&#x27;银牌数&#x27;</span>, <span class="hljs-string">&#x27;铜牌数&#x27;</span>]]<br>df_selected_names.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>当你向 <code>df[...]</code> 中传入一个列名列表时，就可以选取多列。<strong>使用双中括号 <code>[[...]]</code> 会确保返回的是一个 DataFrame</strong>，而不是 Series。</li>
+</ul>
+</li>
+</ul>
+<h3 id="24-筛选列｜条件（列号）"><a href="#24-筛选列｜条件（列号）" class="headerlink" title="24. 筛选列｜条件（列号）"></a><strong>24. 筛选列｜条件（列号）</strong></h3><ul>
+<li><strong>题目</strong>: 筛选全部 <strong>奇数列</strong>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_odd_cols = df.iloc[:, <span class="hljs-number">1</span>::<span class="hljs-number">2</span>]<br>df_odd_cols.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>iloc</code> 支持 Python 的切片语法。<code>1::2</code> 的意思是：从索引 1 开始，到结尾为止，步长为 2。</li>
+</ul>
+</li>
+</ul>
+<h3 id="25-筛选列｜条件（列名）"><a href="#25-筛选列｜条件（列名）" class="headerlink" title="25. 筛选列｜条件（列名）"></a><strong>25. 筛选列｜条件（列名）</strong></h3><ul>
+<li><strong>题目</strong>: 提取全部列名中包含 <code>数</code> 的列。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_filtered_names = df.<span class="hljs-built_in">filter</span>(like=<span class="hljs-string">&#x27;数&#x27;</span>)<br>df_filtered_names.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>filter()</code> 方法是筛选列名的利器。<code>like=&#39;数&#39;</code> 会返回所有列名中包含“数”这个字的列。</li>
+</ul>
+</li>
+</ul>
+<h3 id="26-筛选列｜组合（行号-列名）"><a href="#26-筛选列｜组合（行号-列名）" class="headerlink" title="26. 筛选列｜组合（行号+列名）"></a><strong>26. 筛选列｜组合（行号+列名）</strong></h3><ul>
+<li><strong>题目</strong>: 提取倒数后三列的10-20行。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_sliced = df.iloc[<span class="hljs-number">10</span>:<span class="hljs-number">21</span>, -<span class="hljs-number">3</span>:]<br>df_sliced<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>iloc</code> 非常适合这种行列组合切片。<code>10:21</code> 选取第10到20行（不含21），<code>-3:</code> 选取倒数第3列到最后一列。</li>
+</ul>
+</li>
+</ul>
+<h3 id="27-筛选行｜通过行号"><a href="#27-筛选行｜通过行号" class="headerlink" title="27. 筛选行｜通过行号"></a><strong>27. 筛选行｜通过行号</strong></h3><ul>
+<li><strong>题目</strong>: 提取第 10 行。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_row_10 = df.iloc[[<span class="hljs-number">9</span>]] <span class="hljs-comment"># 索引从0开始，所以第10行是iloc[9]</span><br>df_row_10<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>同样，使用双中括号 <code>[[9]]</code> 会返回一个单行 DataFrame。如果用 <code>df.iloc[9]</code> 则会返回一个 Series。</li>
+</ul>
+</li>
+</ul>
+<h3 id="28-筛选行｜通过行号（多行）"><a href="#28-筛选行｜通过行号（多行）" class="headerlink" title="28. 筛选行｜通过行号（多行）"></a><strong>28. 筛选行｜通过行号（多行）</strong></h3><ul>
+<li><strong>题目</strong>: 提取第 10 行之后的全部行。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_after_10 = df.iloc[<span class="hljs-number">10</span>:]<br>df_after_10.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>切片 <code>10:</code> 表示从索引为10的行开始，一直到 DataFrame 的末尾。</li>
+</ul>
+</li>
+</ul>
+<h3 id="29-筛选行｜固定间隔"><a href="#29-筛选行｜固定间隔" class="headerlink" title="29. 筛选行｜固定间隔"></a><strong>29. 筛选行｜固定间隔</strong></h3><ul>
+<li><strong>题目</strong>: 提取 0-50 行，间隔为 3。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_strided = df.iloc[<span class="hljs-number">0</span>:<span class="hljs-number">51</span>:<span class="hljs-number">3</span>]<br>df_strided.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>Python 标准的切片 <code>[start:stop:step]</code> 在 <code>iloc</code> 中同样适用。</li>
+</ul>
+</li>
+</ul>
+<h3 id="30-筛选行｜判断（大于）"><a href="#30-筛选行｜判断（大于）" class="headerlink" title="30. 筛选行｜判断（大于）"></a><strong>30. 筛选行｜判断（大于）</strong></h3><ul>
+<li><strong>题目</strong>: 提取 金牌数 大于 30 的行。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_gold_30 = df[df[<span class="hljs-string">&#x27;金牌数&#x27;</span>] &gt; <span class="hljs-number">30</span>]<br>df_gold_30<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>这是 Pandas 中最核心的<strong>布尔索引</strong>。<code>df[&#39;金牌数&#39;] &gt; 30</code> 会生成一个布尔值的 Series，用它来过滤 <code>df</code>，<code>df</code> 会只保留那些对应值为 <code>True</code> 的行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="31-筛选行-｜判断（等于）"><a href="#31-筛选行-｜判断（等于）" class="headerlink" title="31. 筛选行 ｜判断（等于）"></a><strong>31. 筛选行 ｜判断（等于）</strong></h3><ul>
+<li><strong>题目</strong>: 提取 <code>金牌数</code> 等于 10 的行。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_gold_10 = df[df[<span class="hljs-string">&#x27;金牌数&#x27;</span>] == <span class="hljs-number">10</span>]<br>df_gold_10<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>与上一题同理，只是比较运算符从 <code>&gt;</code> 变成了 <code>==</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="32-筛选行｜判断（不等于）"><a href="#32-筛选行｜判断（不等于）" class="headerlink" title="32. 筛选行｜判断（不等于）"></a><strong>32. 筛选行｜判断（不等于）</strong></h3><ul>
+<li><strong>题目</strong>: 提取 <code>金牌数</code> 不等于 <code>10</code> 的行。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_not_gold_10 = df[df[<span class="hljs-string">&#x27;金牌数&#x27;</span>] != <span class="hljs-number">10</span>]<br>df_not_gold_10.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>不等于的运算符是 <code>!=</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="33-筛选行｜条件（指定行号）"><a href="#33-筛选行｜条件（指定行号）" class="headerlink" title="33. 筛选行｜条件（指定行号）"></a><strong>33. 筛选行｜条件（指定行号）</strong></h3><ul>
+<li><strong>题目</strong>: 提取全部 <strong>奇数行</strong>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_odd_rows = df.iloc[<span class="hljs-number">1</span>::<span class="hljs-number">2</span>]<br>df_odd_rows.head()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>同样是利用 <code>iloc</code> 的切片步长功能。</li>
+</ul>
+</li>
+</ul>
+<h3 id="34-筛选行｜条件（指定值）"><a href="#34-筛选行｜条件（指定值）" class="headerlink" title="34. 筛选行｜条件（指定值）"></a><strong>34. 筛选行｜条件（指定值）</strong></h3><ul>
+<li><strong>题目</strong>: 提取 中国、美国、英国 三行数据。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">countries = [<span class="hljs-string">&#x27;中华人民共和国&#x27;</span>, <span class="hljs-string">&#x27;美国&#x27;</span>, <span class="hljs-string">&#x27;英国&#x27;</span>]<br>df_selected_countries = df[df[<span class="hljs-string">&#x27;国家奥委会&#x27;</span>].isin(countries)]<br>df_selected_countries<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>isin()</code> 方法非常适合筛选“等于多个值中任意一个”的情况。它接收一个列表，返回一个布尔 Series。</li>
+</ul>
+</li>
+</ul>
+<h3 id="35-筛选行｜多条件"><a href="#35-筛选行｜多条件" class="headerlink" title="35. 筛选行｜多条件"></a><strong>35. 筛选行｜多条件</strong></h3><ul>
+<li><strong>题目</strong>: 在上一题的条件下，新增一个条件：<strong>金牌数小于30</strong></li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">countries = [<span class="hljs-string">&#x27;中华人民共和国&#x27;</span>, <span class="hljs-string">&#x27;美国&#x27;</span>, <span class="hljs-string">&#x27;英国&#x27;</span>]<br>df_multi_cond = df[(df[<span class="hljs-string">&#x27;国家奥委会&#x27;</span>].isin(countries)) &amp; (df[<span class="hljs-string">&#x27;金牌数&#x27;</span>] &lt; <span class="hljs-number">30</span>)]<br>df_multi_cond<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>多个条件组合时，使用 <code>&amp;</code> 代表“与”(and)，<code>|</code> 代表“或”(or)。</li>
+<li><strong>务必用括号 <code>()</code> 将每个独立的条件括起来</strong>，这是因为 Python 运算符优先级的原因。</li>
+</ul>
+</li>
+</ul>
+<h3 id="36-筛选行｜条件（包含指定值）"><a href="#36-筛选行｜条件（包含指定值）" class="headerlink" title="36. 筛选行｜条件（包含指定值）"></a><strong>36. 筛选行｜条件（包含指定值）</strong></h3><ul>
+<li><strong>题目</strong>: 提取 <code>国家奥委会</code> 列中，所有包含 <code>国</code>的行。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_contains_guo = df[df[<span class="hljs-string">&#x27;国家奥委会&#x27;</span>].<span class="hljs-built_in">str</span>.contains(<span class="hljs-string">&#x27;国&#x27;</span>, na=<span class="hljs-literal">False</span>)]<br>df_contains_guo<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>.str</code> 访问器允许我们对整列字符串进行操作。</li>
+<li><code>.str.contains(&#39;国&#39;)</code> 会检查每个字符串是否包含“国”字。</li>
+<li><code>na=False</code> 表示如果遇到缺失值，则直接返回 <code>False</code>，避免出错。</li>
+</ul>
+</li>
+</ul>
+<h3 id="37-筛选某行某列"><a href="#37-筛选某行某列" class="headerlink" title="37. 筛选某行某列"></a><strong>37. 筛选某行某列</strong></h3><ul>
+<li><strong>题目</strong>: 提取 <code>第 0 行第 2 列</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># .iloc[行位置, 列位置]</span><br>value_0_2 = df.iloc[<span class="hljs-number">0</span>, <span class="hljs-number">2</span>]<br>value_0_2<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>iloc</code> 中用逗号分隔行和列的位置，可以直接定位到单个值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="38-筛选多行多列"><a href="#38-筛选多行多列" class="headerlink" title="38. 筛选多行多列"></a><strong>38. 筛选多行多列</strong></h3><ul>
+<li><strong>题目</strong>: 提取 第 0-2 行第 0-2 列。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_block = df.iloc[<span class="hljs-number">0</span>:<span class="hljs-number">3</span>, <span class="hljs-number">0</span>:<span class="hljs-number">3</span>]<br>df_block<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>行和列都使用切片语法，可以方便地提取出一个矩形区块。</li>
+</ul>
+</li>
+</ul>
+<h3 id="39-筛选值｜组合（行号-列号）"><a href="#39-筛选值｜组合（行号-列号）" class="headerlink" title="39. 筛选值｜组合（行号+列号）"></a><strong>39. 筛选值｜组合（行号+列号）</strong></h3><ul>
+<li><strong>题目</strong>: 提取第 4 行，第 4 列的值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">value_4_4 = df.iloc[<span class="hljs-number">4</span>, <span class="hljs-number">4</span>] <span class="hljs-comment"># 第5行是索引4，第5列是索引4</span><br>value_4_4<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>与37题同理，使用 <code>iloc</code> 进行精确定位。</li>
+</ul>
+</li>
+</ul>
+<h3 id="40-筛选值｜组合（行号-列名）"><a href="#40-筛选值｜组合（行号-列名）" class="headerlink" title="40. 筛选值｜组合（行号+列名）"></a><strong>40. 筛选值｜组合（行号+列名）</strong></h3><ul>
+<li><strong>题目</strong>: 提取行索引为 4 ，列名为 金牌数 的值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">value_loc = df.loc[<span class="hljs-number">4</span>, <span class="hljs-string">&#x27;金牌数&#x27;</span>]<br>value_loc<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>loc</code> 用于基于<strong>标签</strong>的索引。这里行标签是 <code>4</code>，列标签是 <code>&#39;金牌数&#39;</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="41-筛选值｜条件"><a href="#41-筛选值｜条件" class="headerlink" title="41. 筛选值｜条件"></a><strong>41. 筛选值｜条件</strong></h3><ul>
+<li><strong>题目</strong>: 提取 国家奥委会 为 <code>中华人民共和国</code> 的金牌数。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 先筛选行，再选择列</span><br>china_gold = df.loc[df[<span class="hljs-string">&#x27;国家奥委会&#x27;</span>] == <span class="hljs-string">&#x27;中华人民共和国&#x27;</span>, <span class="hljs-string">&#x27;金牌数&#x27;</span>]<br><span class="hljs-comment"># 因为结果只有一个值，它会是一个Series，可以用.item()或.values[0]提取纯数值</span><br>china_gold.item()<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>这是一种非常常见的组合用法：<code>df.loc[行过滤条件, &#39;目标列名&#39;]</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="42-筛选值｜query"><a href="#42-筛选值｜query" class="headerlink" title="42. 筛选值｜query"></a><strong>42. 筛选值｜query</strong></h3><ul>
+<li><strong>题目</strong>: 使用 <code>query</code> 提取 金牌数 + 银牌数 大于 70 的国家。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">df_query_1 = df.query(<span class="hljs-string">&#x27;金牌数 + 银牌数 &gt; 70&#x27;</span>)<br>df_query_1<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li><code>query()</code> 方法允许你使用字符串表达式来筛选数据，当条件复杂时，代码可读性比布尔索引更好。可以直接在字符串中书写列名和计算。</li>
+</ul>
+</li>
+</ul>
+<h3 id="43-筛选值｜query（引用变量）"><a href="#43-筛选值｜query（引用变量）" class="headerlink" title="43. 筛选值｜query（引用变量）"></a><strong>43. 筛选值｜query（引用变量）</strong></h3><ul>
+<li><strong>题目</strong>: 使用 <code>query</code> 提取 金牌数 大于 金牌均值的国家。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 先计算均值</span><br>gold_mean = df[<span class="hljs-string">&#x27;金牌数&#x27;</span>].mean()<br><br><span class="hljs-comment"># 在query字符串中使用@符号引用外部变量</span><br>df_query_2 = df.query(<span class="hljs-string">&#x27;金牌数 &gt; @gold_mean&#x27;</span>)<br>df_query_2<br></code></pre></td></tr></table></figure></li>
+<li><strong>解释</strong>:<ul>
+<li>在 <code>query</code> 表达式字符串中，你可以在变量名前加上 <code>@</code> 符号，来引用在代码环境中已定义的外部变量。</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/pandas/" class="category-chain-item">pandas</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/pandas/" class="print-no-link">#pandas</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" class="print-no-link">#数据处理</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>5.数据筛选与修改</div>
+      <div>https://blog.wyyy.dpdns.org/2025/5-数据筛选与修改/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lwy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年7月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/6-%E6%95%B0%E6%8D%AE%E5%88%86%E7%BB%84%E4%B8%8E%E8%81%9A%E5%90%88/" title="6.数据分组与聚合">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">6.数据分组与聚合</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/4-%E6%95%B0%E6%8D%AE%E7%BB%9F%E8%AE%A1%E6%8F%8F%E8%BF%B0%E6%80%A7%E5%88%86%E6%9E%90/" title="4.数据统计描述性分析">
+                        <span class="hidden-mobile">4.数据统计描述性分析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
