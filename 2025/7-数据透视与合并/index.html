@@ -1,0 +1,1005 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="lwy">
+  <meta name="keywords" content="数据透视与合并">
+  
+    <meta name="description" content="数据透视与合并，包括数据透视表、数据合并等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="7.数据透视与合并">
+<meta property="og:url" content="https://blog.wyyy.dpdns.org/2025/7-%E6%95%B0%E6%8D%AE%E9%80%8F%E8%A7%86%E4%B8%8E%E5%90%88%E5%B9%B6/index.html">
+<meta property="og:site_name" content="WyRecords">
+<meta property="og:description" content="数据透视与合并，包括数据透视表、数据合并等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-27T11:14:31.000Z">
+<meta property="article:modified_time" content="2025-07-31T12:55:24.153Z">
+<meta property="article:author" content="lwy">
+<meta property="article:tag" content="pandas">
+<meta property="article:tag" content="数据处理">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>7.数据透视与合并 - WyRecords</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.wyyy.dpdns.org","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WyRecords</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="7.数据透视与合并"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-07-27 19:14" pubdate>
+          星期日, 七月 27日 2025, 7:14 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">7.数据透视与合并</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年7月31日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="数据透视表-pivot-table"><a href="#数据透视表-pivot-table" class="headerlink" title="数据透视表 (pivot_table)"></a><strong>数据透视表 (pivot_table)</strong></h2><p>数据透视表是探索多维数据关系的强大工具，它可以将“长”格式的数据重塑为“宽”格式的、类似电子表格的视图。</p>
+<h3 id="1-加载数据"><a href="#1-加载数据" class="headerlink" title="1. 加载数据"></a><strong>1. 加载数据</strong></h3><ul>
+<li><strong>题目</strong>: 读取当前目录下 <code>&quot;某超市销售数据.csv&quot;</code> 并设置千分位符号为 <code>,</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><br><span class="hljs-comment"># thousands=&#x27;,&#x27; 用于在读取时自动处理带千分位逗号的数字字符串</span><br>df = pd.read_csv(<span class="hljs-string">&quot;某超市销售数据.csv&quot;</span>, thousands=<span class="hljs-string">&#x27;,&#x27;</span>)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li>在数据分析中，经常会遇到用逗号作为千分位分隔符的数字（如 “1,234.56”）。如果直接读取，Pandas 会将其识别为字符串 <code>object</code> 类型，无法进行数值计算。</li>
+<li><code>pd.read_csv()</code> 的 <code>thousands</code> 参数就是为了解决这个问题。通过设置 <code>thousands=&#39;,&#39;</code>，Pandas 在读取时会自动移除逗号，并将该列正确地解析为数值类型（如 <code>int64</code> 或 <code>float64</code>）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-数据透视｜默认"><a href="#2-数据透视｜默认" class="headerlink" title="2. 数据透视｜默认"></a><strong>2. 数据透视｜默认</strong></h3><ul>
+<li><strong>题目</strong>: 制作各省「平均销售额」的数据透视表。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用 pivot_table</span><br>pivot_table_mean = pd.pivot_table(df, values = <span class="hljs-string">&#x27;销售额&#x27;</span>,index = <span class="hljs-string">&#x27;省/自治区&#x27;</span>)<br><span class="hljs-built_in">print</span>(pivot_table_mean)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>pd.pivot_table()</code> 是创建数据透视表的核心函数。</li>
+<li><strong><code>df</code></strong>: 第一个参数是待操作的 DataFrame。</li>
+<li><strong><code>index=&#39;省/自治区&#39;</code></strong>: <code>index</code> 参数指定了新表的<strong>行索引</strong>，我们想按省份来观察数据，所以将其设置为 <code>&#39;省/自治区&#39;</code>。</li>
+<li><strong>默认行为</strong>: 当我们不指定 <code>values</code>（要聚合的数值）和 <code>aggfunc</code>（聚合函数）时，<code>pivot_table</code> 默认会：<ol>
+<li>选取<strong>所有数值类型</strong>的列作为 <code>values</code>。</li>
+<li>使用<strong>均值 (<code>&#39;mean&#39;</code>)</strong> 作为默认的 <code>aggfunc</code>。</li>
+</ol>
+</li>
+<li>因此，这个简单的调用就能得到各省所有数值列的平均值，其中就包含了平均销售额。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-数据透视｜指定方法"><a href="#3-数据透视｜指定方法" class="headerlink" title="3. 数据透视｜指定方法"></a><strong>3. 数据透视｜指定方法</strong></h3><ul>
+<li><strong>题目</strong>: 制作各省「销售总额」的数据透视表。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">pivot_table_sum = pd.pivot_table(df, index=<span class="hljs-string">&#x27;省/自治区&#x27;</span>, values=<span class="hljs-string">&#x27;销售额&#x27;</span>, aggfunc=<span class="hljs-string">&#x27;sum&#x27;</span>)<br><span class="hljs-built_in">print</span>(pivot_table_sum)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li>这次我们需求更明确，需要用到另外两个核心参数：</li>
+<li><strong><code>values=&#39;销售额&#39;</code></strong>: 指定我们只关心“销售额”这一列的聚合结果。</li>
+<li><strong><code>aggfunc=&#39;sum&#39;</code></strong>: 指定聚合函数为求和 (<code>&#39;sum&#39;</code>)，而不是默认的求均值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-数据透视｜多方法"><a href="#4-数据透视｜多方法" class="headerlink" title="4. 数据透视｜多方法"></a><strong>4. 数据透视｜多方法</strong></h3><ul>
+<li><strong>题目</strong>: 制作各省「销售总额」与「平均销售额」的数据透视表。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">pivot_table_multi_func = pd.pivot_table(df, index=<span class="hljs-string">&#x27;省/自治区&#x27;</span>, values=<span class="hljs-string">&#x27;销售额&#x27;</span>, aggfunc=[<span class="hljs-string">&#x27;sum&#x27;</span>, <span class="hljs-string">&#x27;mean&#x27;</span>])<br><span class="hljs-built_in">print</span>(pivot_table_multi_func)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>aggfunc</code> 参数可以接收一个<strong>函数列表</strong>。当你想对同一个 <code>values</code> 列应用多种聚合方法时，只需将这些方法的名称字符串放到一个列表中传给它即可。</li>
+<li>Pandas 会自动为每种聚合方法生成一列。</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-数据透视｜多指标"><a href="#5-数据透视｜多指标" class="headerlink" title="5. 数据透视｜多指标"></a><strong>5. 数据透视｜多指标</strong></h3><ul>
+<li><strong>题目</strong>: 制作各省市「销售总额」与「利润总额」的数据透视表。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">pivot_table_multi_values = pd.pivot_table(df, index=<span class="hljs-string">&#x27;省/自治区&#x27;</span>, values=[<span class="hljs-string">&#x27;销售额&#x27;</span>, <span class="hljs-string">&#x27;利润&#x27;</span>], aggfunc=<span class="hljs-string">&#x27;sum&#x27;</span>)<br><span class="hljs-built_in">print</span>(pivot_table_multi_values)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>values</code> 参数同样可以接收一个<strong>列名列表</strong>。当你想同时对多个指标进行聚合时，将它们的列名放到一个列表中传给 <code>values</code>。</li>
+<li><code>aggfunc=&#39;sum&#39;</code> 会分别应用到 <code>values</code> 列表中的每一列。</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-数据透视｜多索引"><a href="#6-数据透视｜多索引" class="headerlink" title="6. 数据透视｜多索引"></a><strong>6. 数据透视｜多索引</strong></h3><ul>
+<li><strong>题目</strong>: 制作「各省市」与「不同类别」产品「销售总额」的数据透视表。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">pivot_table_multi_index = pd.pivot_table(df, index=[<span class="hljs-string">&#x27;省/自治区&#x27;</span>, <span class="hljs-string">&#x27;类别&#x27;</span>], values=<span class="hljs-string">&#x27;销售额&#x27;</span>, aggfunc=<span class="hljs-string">&#x27;sum&#x27;</span>)<br><span class="hljs-built_in">print</span>(pivot_table_multi_index)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>index</code> 参数也可以接收一个<strong>列名列表</strong>。这会创建一个**多级行索引 (MultiIndex)**。</li>
+<li>结果表会先按 <code>&#39;省/自治区&#39;</code> 分组，再在每个省内按 <code>&#39;类别&#39;</code> 分组，清晰地展示了更细粒度的交叉数据。</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-数据透视｜多层"><a href="#7-数据透视｜多层" class="headerlink" title="7. 数据透视｜多层"></a><strong>7. 数据透视｜多层</strong></h3><ul>
+<li><strong>题目</strong>: 制作各省市「不同类别」产品的「销售总额」透视表。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">pivot_table_multi_level = pd.pivot_table(df, index=<span class="hljs-string">&#x27;省/自治区&#x27;</span>, columns=<span class="hljs-string">&#x27;类别&#x27;</span>, values=<span class="hljs-string">&#x27;销售额&#x27;</span>, aggfunc=<span class="hljs-string">&#x27;sum&#x27;</span>)<br><span class="hljs-built_in">print</span>(pivot_table_multi_level)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><strong><code>columns=&#39;类别&#39;</code></strong>: 这是透视表的另一个核心参数。<code>columns</code> 参数可以将指定列中的唯一值“提升”为<strong>新表的列标签</strong>。</li>
+<li>这个操作将原本在“类别”列中的“办公用品”、“家具”、“技术”变成了表的列，使得数据更加扁平化，一目了然。这就是“透视”的核心所在。</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-数据透视｜综合"><a href="#8-数据透视｜综合" class="headerlink" title="8. 数据透视｜综合"></a><strong>8. 数据透视｜综合</strong></h3><ul>
+<li><strong>题目</strong>: 制作「各省市」、「不同类别」产品「销售量与销售额」的「均值与总和」的数据透视表，并在最后追加一行『合计』。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">comprehensive_pivot = pd.pivot_table(<br>    df,<br>    index=[<span class="hljs-string">&#x27;省/自治区&#x27;</span>, <span class="hljs-string">&#x27;类别&#x27;</span>],        <span class="hljs-comment"># 多级行索引</span><br>    values=[<span class="hljs-string">&#x27;数量&#x27;</span>, <span class="hljs-string">&#x27;销售额&#x27;</span>],          <span class="hljs-comment"># 多个聚合值</span><br>    aggfunc=[<span class="hljs-string">&#x27;mean&#x27;</span>, <span class="hljs-string">&#x27;sum&#x27;</span>],         <span class="hljs-comment"># 多个聚合函数</span><br>    margins=<span class="hljs-literal">True</span>,                    <span class="hljs-comment"># 添加合计行/列</span><br>    margins_name=<span class="hljs-string">&#x27;合计&#x27;</span>                <span class="hljs-comment"># 自定义合计名称</span><br>)<br><span class="hljs-built_in">print</span>(comprehensive_pivot)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li>这是一个展示 <code>pivot_table</code> 强大功能的综合案例，它组合了多个参数：</li>
+<li><code>index</code>, <code>values</code>, <code>aggfunc</code> 都使用了列表，创建了一个多维交叉表。</li>
+<li><strong><code>margins=True</code></strong>: 这个参数会自动在结果表的最后添加一行和一列，计算所有数据的总计（All）。</li>
+<li><strong><code>margins_name=&#39;合计&#39;</code></strong>: 用于自定义这个总计行&#x2F;列的名称。</li>
+</ul>
+</li>
+</ul>
+<h3 id="9-数据透视｜筛选"><a href="#9-数据透视｜筛选" class="headerlink" title="9. 数据透视｜筛选"></a><strong>9. 数据透视｜筛选</strong></h3><ul>
+<li><strong>题目</strong>: 在上一题的基础上，查询 <strong>「类别」</strong> 等于 <strong>「办公用品」</strong> 的详情。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 先生成上一题的透视表</span><br>comprehensive_pivot = pd.pivot_table(df, index=[<span class="hljs-string">&#x27;省/自治区&#x27;</span>, <span class="hljs-string">&#x27;类别&#x27;</span>], values=[<span class="hljs-string">&#x27;数量&#x27;</span>, <span class="hljs-string">&#x27;销售额&#x27;</span>], aggfunc=[<span class="hljs-string">&#x27;mean&#x27;</span>, <span class="hljs-string">&#x27;sum&#x27;</span>], margins=<span class="hljs-literal">True</span>, margins_name=<span class="hljs-string">&#x27;合计&#x27;</span>)<br><span class="hljs-comment"># 使用 query 方法筛选</span><br>office_supplies_detail = comprehensive_pivot.query(<span class="hljs-string">&quot;类别 == &#x27;办公用品&#x27;&quot;</span>)<br><span class="hljs-built_in">print</span>(office_supplies_detail)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>pivot_table</code> 的结果是一个标准的 DataFrame，因此所有 DataFrame 的筛选方法都适用。</li>
+<li><strong><code>query()</code></strong>: 由于透视表的结果是多级索引，使用 <code>query()</code> 方法进行筛选非常方便。你可以直接在查询字符串中指定索引层级的名称（如 <code>&#39;类别&#39;</code>）和条件。</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-数据透视｜逆透视"><a href="#10-数据透视｜逆透视" class="headerlink" title="10. 数据透视｜逆透视"></a><strong>10. 数据透视｜逆透视</strong></h3><ul>
+<li><strong>题目</strong>: 将第 5 题的透视表进行逆透视，其中不需要转换的列为『数量』列。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 先生成第五题的表 (多指标)</span><br>pivot_multi_values = pd.pivot_table(df, index=<span class="hljs-string">&#x27;省/自治区&#x27;</span>, values=[<span class="hljs-string">&#x27;销售额&#x27;</span>, <span class="hljs-string">&#x27;利润&#x27;</span>,<span class="hljs-string">&#x27;数量&#x27;</span>], aggfunc=<span class="hljs-string">&#x27;sum&#x27;</span>).reset_index()<br><br><span class="hljs-comment"># 进行逆透视 (melt)</span><br>melted_table = pd.melt(<br>    pivot_multi_values,<br>    id_vars=[<span class="hljs-string">&#x27;省/自治区&#x27;</span>, <span class="hljs-string">&#x27;数量&#x27;</span>],   <span class="hljs-comment"># 保持不变的标识列</span><br>    value_vars=[<span class="hljs-string">&#x27;销售额&#x27;</span>, <span class="hljs-string">&#x27;利润&#x27;</span>], <span class="hljs-comment"># 需要被“融化”到行的列</span><br>    var_name=<span class="hljs-string">&#x27;指标类型&#x27;</span>,          <span class="hljs-comment"># 新的变量列名</span><br>    value_name=<span class="hljs-string">&#x27;金额&#x27;</span>             <span class="hljs-comment"># 新的值列名</span><br>)<br><span class="hljs-built_in">print</span>(melted_table.head())<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><strong><code>pd.melt()</code></strong>: <code>melt</code> 是 <code>pivot</code> 的逆操作，它将“宽”格式的数据转换回“长”格式，这在某些数据处理或可视化场景中非常有用。</li>
+<li><code>id_vars=[&#39;省/自治区&#39;, &#39;数量&#39;]</code>: <strong>标识变量</strong>，这些列在转换过程中保持不变，会为每个“融化”的行重复出现。</li>
+<li><code>value_vars=[&#39;销售额&#39;, &#39;利润&#39;]</code>: <strong>值变量</strong>，这些列的<strong>列名</strong>会被“融化”到一个新的列中（由 <code>var_name</code> 指定），它们对应的<strong>值</strong>会被“融化”到另一个新列中（由 <code>value_name</code> 指定）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="数据合并-concat"><a href="#数据合并-concat" class="headerlink" title="数据合并 (concat)"></a><strong>数据合并 (concat)</strong></h2><p><code>concat</code> 用于沿着一个轴（行或列）将多个 DataFrame 对象<strong>拼接</strong>在一起。</p>
+<h4 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a><strong>准备数据</strong></h4><p>首先，我们执行代码生成本节所需的 <code>df1</code>, <code>df2</code>, <code>df3</code>, <code>df4</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">df1 = pd.DataFrame(&#123;<span class="hljs-string">&#x27;A&#x27;</span>: [<span class="hljs-string">&#x27;A0&#x27;</span>, <span class="hljs-string">&#x27;A1&#x27;</span>, <span class="hljs-string">&#x27;A2&#x27;</span>, <span class="hljs-string">&#x27;A3&#x27;</span>], <span class="hljs-string">&#x27;B&#x27;</span>: [<span class="hljs-string">&#x27;B0&#x27;</span>, <span class="hljs-string">&#x27;B1&#x27;</span>, <span class="hljs-string">&#x27;B2&#x27;</span>, <span class="hljs-string">&#x27;B3&#x27;</span>], <span class="hljs-string">&#x27;C&#x27;</span>: [<span class="hljs-string">&#x27;C0&#x27;</span>, <span class="hljs-string">&#x27;C1&#x27;</span>, <span class="hljs-string">&#x27;C2&#x27;</span>, <span class="hljs-string">&#x27;C3&#x27;</span>], <span class="hljs-string">&#x27;D&#x27;</span>: [<span class="hljs-string">&#x27;D0&#x27;</span>, <span class="hljs-string">&#x27;D1&#x27;</span>, <span class="hljs-string">&#x27;D2&#x27;</span>, <span class="hljs-string">&#x27;D3&#x27;</span>]&#125;, index=[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])<br>df2 = pd.DataFrame(&#123;<span class="hljs-string">&#x27;A&#x27;</span>: [<span class="hljs-string">&#x27;A4&#x27;</span>, <span class="hljs-string">&#x27;A5&#x27;</span>, <span class="hljs-string">&#x27;A6&#x27;</span>, <span class="hljs-string">&#x27;A7&#x27;</span>], <span class="hljs-string">&#x27;B&#x27;</span>: [<span class="hljs-string">&#x27;B4&#x27;</span>, <span class="hljs-string">&#x27;B5&#x27;</span>, <span class="hljs-string">&#x27;B6&#x27;</span>, <span class="hljs-string">&#x27;B7&#x27;</span>], <span class="hljs-string">&#x27;C&#x27;</span>: [<span class="hljs-string">&#x27;C4&#x27;</span>, <span class="hljs-string">&#x27;C5&#x27;</span>, <span class="hljs-string">&#x27;C6&#x27;</span>, <span class="hljs-string">&#x27;C7&#x27;</span>], <span class="hljs-string">&#x27;D&#x27;</span>: [<span class="hljs-string">&#x27;D4&#x27;</span>, <span class="hljs-string">&#x27;D5&#x27;</span>, <span class="hljs-string">&#x27;D6&#x27;</span>, <span class="hljs-string">&#x27;D7&#x27;</span>]&#125;, index=[<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>])<br>df3 = pd.DataFrame(&#123;<span class="hljs-string">&#x27;A&#x27;</span>: [<span class="hljs-string">&#x27;A8&#x27;</span>, <span class="hljs-string">&#x27;A9&#x27;</span>, <span class="hljs-string">&#x27;A10&#x27;</span>, <span class="hljs-string">&#x27;A11&#x27;</span>], <span class="hljs-string">&#x27;B&#x27;</span>: [<span class="hljs-string">&#x27;B8&#x27;</span>, <span class="hljs-string">&#x27;B9&#x27;</span>, <span class="hljs-string">&#x27;B10&#x27;</span>, <span class="hljs-string">&#x27;B11&#x27;</span>], <span class="hljs-string">&#x27;C&#x27;</span>: [<span class="hljs-string">&#x27;C8&#x27;</span>, <span class="hljs-string">&#x27;C9&#x27;</span>, <span class="hljs-string">&#x27;C10&#x27;</span>, <span class="hljs-string">&#x27;C11&#x27;</span>], <span class="hljs-string">&#x27;D&#x27;</span>: [<span class="hljs-string">&#x27;D8&#x27;</span>, <span class="hljs-string">&#x27;D9&#x27;</span>, <span class="hljs-string">&#x27;D10&#x27;</span>, <span class="hljs-string">&#x27;D11&#x27;</span>]&#125;, index=[<span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>])<br>df4 = pd.DataFrame(&#123;<span class="hljs-string">&#x27;B&#x27;</span>: [<span class="hljs-string">&#x27;B2&#x27;</span>, <span class="hljs-string">&#x27;B3&#x27;</span>, <span class="hljs-string">&#x27;B6&#x27;</span>, <span class="hljs-string">&#x27;B7&#x27;</span>], <span class="hljs-string">&#x27;D&#x27;</span>: [<span class="hljs-string">&#x27;D2&#x27;</span>, <span class="hljs-string">&#x27;D3&#x27;</span>, <span class="hljs-string">&#x27;D6&#x27;</span>, <span class="hljs-string">&#x27;D7&#x27;</span>], <span class="hljs-string">&#x27;F&#x27;</span>: [<span class="hljs-string">&#x27;F2&#x27;</span>, <span class="hljs-string">&#x27;F3&#x27;</span>, <span class="hljs-string">&#x27;F6&#x27;</span>, <span class="hljs-string">&#x27;F7&#x27;</span>]&#125;, index=[<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>])<br></code></pre></td></tr></table></figure>
+
+<h3 id="11-concat｜默认拼接"><a href="#11-concat｜默认拼接" class="headerlink" title="11. concat｜默认拼接"></a><strong>11. concat｜默认拼接</strong></h3><ul>
+<li><strong>题目</strong>: 拼接 df1 和 df2。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">concatenated_df = pd.concat([df1, df2])<br><span class="hljs-built_in">print</span>(concatenated_df)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>pd.concat()</code> 的基本用法是接收一个 DataFrame 对象的列表 <code>[df1, df2, ...]</code>。</li>
+<li>默认情况下，<code>concat</code> 沿着 <code>axis=0</code>（即行）进行拼接，将第二个 DataFrame 的行追加到第一个的末尾。</li>
+</ul>
+</li>
+</ul>
+<h3 id="12-concat｜拼接多个"><a href="#12-concat｜拼接多个" class="headerlink" title="12. concat｜拼接多个"></a><strong>12. concat｜拼接多个</strong></h3><ul>
+<li><strong>题目</strong>: 垂直拼接 <code>df1、df2、df3</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">concatenated_multi = pd.concat([df1, df2, df3])<br><span class="hljs-built_in">print</span>(concatenated_multi)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>concat</code> 可以拼接任意多个 DataFrame，只需将它们都放到列表中即可。</li>
+</ul>
+</li>
+</ul>
+<h3 id="13-concat｜重置索引"><a href="#13-concat｜重置索引" class="headerlink" title="13. concat｜重置索引"></a><strong>13. concat｜重置索引</strong></h3><ul>
+<li><strong>题目</strong>: 垂直拼接 df1 和 df4，并按顺序重新生成索引。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">concat_ignore_index = pd.concat([df1, df4], ignore_index=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(concat_ignore_index)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><strong><code>ignore_index=True</code></strong>: 当拼接的 DataFrame 索引不连续或有重叠时，这个参数非常有用。它会忽略原始索引，并为拼接后的新 DataFrame 生成一个从 0 开始的连续索引。</li>
+<li>注意，当 <code>df1</code> 和 <code>df4</code> 拼接时，<code>df1</code> 中有而 <code>df4</code> 中没有的列（C列）和 <code>df4</code> 中有而 <code>df1</code> 中没有的列（F列），其缺失的部分会被 <code>NaN</code> 填充。</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-concat｜横向拼接"><a href="#14-concat｜横向拼接" class="headerlink" title="14. concat｜横向拼接"></a><strong>14. concat｜横向拼接</strong></h3><ul>
+<li><strong>题目</strong>: 横向拼接 <code>df1、df4</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">concat_axis1 = pd.concat([df1, df4], axis=<span class="hljs-number">1</span>)<br><span class="hljs-built_in">print</span>(concat_axis1)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><strong><code>axis=1</code></strong>: 将 <code>axis</code> 参数设置为 1，可以实现<strong>按列（横向）拼接</strong>。</li>
+<li>Pandas 会根据<strong>行索引</strong>来对齐数据。对于那些只有一个 DataFrame 中存在的索引行，另一个 DataFrame 对应的列值会用 <code>NaN</code> 填充。</li>
+</ul>
+</li>
+</ul>
+<h3 id="15-concat｜横向拼接（取交集）"><a href="#15-concat｜横向拼接（取交集）" class="headerlink" title="15. concat｜横向拼接（取交集）"></a><strong>15. concat｜横向拼接（取交集）</strong></h3><ul>
+<li><strong>题目</strong>: 在上一题的基础上，只取结果的交集。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">concat_axis1_inner = pd.concat([df1, df4], axis=<span class="hljs-number">1</span>, join=<span class="hljs-string">&#x27;inner&#x27;</span>)<br><span class="hljs-built_in">print</span>(concat_axis1_inner)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><strong><code>join=&#39;inner&#39;</code></strong>: <code>join</code> 参数控制了在另一个轴上的对齐方式。<ul>
+<li><code>join=&#39;outer&#39;</code> (默认): 取并集，保留所有索引。</li>
+<li><code>join=&#39;inner&#39;</code>: 取<strong>交集</strong>。在横向拼接时，这意味着只保留那些在<strong>两个 DataFrame 中都存在</strong>的行索引。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="16-concat｜横向拼接（取指定）"><a href="#16-concat｜横向拼接（取指定）" class="headerlink" title="16. concat｜横向拼接（取指定）"></a><strong>16. concat｜横向拼接（取指定）</strong></h3><ul>
+<li><strong>题目</strong>: 在 14 题基础上，只取包含 df1 索引的部分。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 在pandas的新版本中，reindex 更为推荐和清晰</span><br>concat_reindex = pd.concat([df1, df4], axis=<span class="hljs-number">1</span>).reindex(df1.index)<br><span class="hljs-built_in">print</span>(concat_reindex)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li>旧版本的 <code>join_axes</code> 参数已被弃用。现代 Pandas 的推荐做法是：</li>
+</ul>
+<ol>
+<li>先正常进行外连接（<code>join=&#39;outer&#39;</code>）横向拼接。</li>
+<li>然后使用 <strong><code>.reindex(df1.index)</code></strong> 方法，根据 <code>df1</code> 的索引来重新索引拼接后的结果。这会精确地只保留 <code>df1</code> 中存在的那些行，效果与旧的 <code>join_axes</code> 一致。</li>
+</ol>
+</li>
+</ul>
+<h3 id="17-concat｜新增索引"><a href="#17-concat｜新增索引" class="headerlink" title="17. concat｜新增索引"></a><strong>17. concat｜新增索引</strong></h3><ul>
+<li><strong>题目</strong>: 拼接 <code>df1、df2、df3</code>，同时新增一个索引（<code>x、y、z</code>）来区分不同的表数据来源。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">concat_with_keys = pd.concat([df1, df2, df3], keys=[<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;z&#x27;</span>])<br><span class="hljs-built_in">print</span>(concat_with_keys)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><strong><code>keys=[&#39;x&#39;, &#39;y&#39;, &#39;z&#39;]</code></strong>: <code>keys</code> 参数非常有用，它可以在拼接的同时，在最外层添加一个<strong>新的索引层级</strong>。</li>
+<li>列表 <code>[&#39;x&#39;, &#39;y&#39;, &#39;z&#39;]</code> 中的元素会分别对应 <code>[df1, df2, df3]</code>，作为它们各自数据块的标识。这在需要追踪数据来源时尤其方便。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="数据合并-merge"><a href="#数据合并-merge" class="headerlink" title="数据合并 (merge)"></a><strong>数据合并 (merge)</strong></h2><p><code>merge</code> 实现了数据库风格的<strong>连接（join）</strong>操作，它根据一个或多个<strong>键（key）</strong>将不同 DataFrame 的行连接起来。</p>
+<h3 id="18-merge｜按单键"><a href="#18-merge｜按单键" class="headerlink" title="18. merge｜按单键"></a><strong>18. merge｜按单键</strong></h3><ul>
+<li><strong>题目</strong>: 根据 <code>key</code> 连接 <code>left</code> 和 <code>right</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">left = pd.DataFrame(&#123;<span class="hljs-string">&#x27;key&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K2&#x27;</span>, <span class="hljs-string">&#x27;K3&#x27;</span>], <span class="hljs-string">&#x27;A&#x27;</span>: [<span class="hljs-string">&#x27;A0&#x27;</span>, <span class="hljs-string">&#x27;A1&#x27;</span>, <span class="hljs-string">&#x27;A2&#x27;</span>, <span class="hljs-string">&#x27;A3&#x27;</span>], <span class="hljs-string">&#x27;B&#x27;</span>: [<span class="hljs-string">&#x27;B0&#x27;</span>, <span class="hljs-string">&#x27;B1&#x27;</span>, <span class="hljs-string">&#x27;B2&#x27;</span>, <span class="hljs-string">&#x27;B3&#x27;</span>]&#125;)<br>right = pd.DataFrame(&#123;<span class="hljs-string">&#x27;key&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K2&#x27;</span>, <span class="hljs-string">&#x27;K3&#x27;</span>], <span class="hljs-string">&#x27;C&#x27;</span>: [<span class="hljs-string">&#x27;C0&#x27;</span>, <span class="hljs-string">&#x27;C1&#x27;</span>, <span class="hljs-string">&#x27;C2&#x27;</span>, <span class="hljs-string">&#x27;C3&#x27;</span>], <span class="hljs-string">&#x27;D&#x27;</span>: [<span class="hljs-string">&#x27;D0&#x27;</span>, <span class="hljs-string">&#x27;D1&#x27;</span>, <span class="hljs-string">&#x27;D2&#x27;</span>, <span class="hljs-string">&#x27;D3&#x27;</span>]&#125;)<br><br>merged_on_key = pd.merge(left, right, on=<span class="hljs-string">&#x27;key&#x27;</span>)<br><span class="hljs-built_in">print</span>(merged_on_key)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>pd.merge(left, right, ...)</code>: <code>merge</code> 是一个顶级函数。</li>
+<li><code>on=&#39;key&#39;</code>: <code>on</code> 参数指定了用作连接依据的<strong>公共列名</strong>。<code>merge</code> 会查找 <code>left</code> 和 <code>right</code> 表中 <code>key</code> 列值相同的行，并将它们合并。</li>
+</ul>
+</li>
+</ul>
+<h3 id="19-merge｜按多键"><a href="#19-merge｜按多键" class="headerlink" title="19. merge｜按多键"></a><strong>19. merge｜按多键</strong></h3><ul>
+<li><strong>题目</strong>: 根据 <code>key1</code> 和 <code>key2</code> 连接 <code>left</code> 和 <code>right</code>。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">left = pd.DataFrame(&#123;<span class="hljs-string">&#x27;key1&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K2&#x27;</span>], <span class="hljs-string">&#x27;key2&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>], <span class="hljs-string">&#x27;A&#x27;</span>: [<span class="hljs-string">&#x27;A0&#x27;</span>, <span class="hljs-string">&#x27;A1&#x27;</span>, <span class="hljs-string">&#x27;A2&#x27;</span>, <span class="hljs-string">&#x27;A3&#x27;</span>], <span class="hljs-string">&#x27;B&#x27;</span>: [<span class="hljs-string">&#x27;B0&#x27;</span>, <span class="hljs-string">&#x27;B1&#x27;</span>, <span class="hljs-string">&#x27;B2&#x27;</span>, <span class="hljs-string">&#x27;B3&#x27;</span>]&#125;)<br>right = pd.DataFrame(&#123;<span class="hljs-string">&#x27;key1&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K2&#x27;</span>], <span class="hljs-string">&#x27;key2&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>], <span class="hljs-string">&#x27;C&#x27;</span>: [<span class="hljs-string">&#x27;C0&#x27;</span>, <span class="hljs-string">&#x27;C1&#x27;</span>, <span class="hljs-string">&#x27;C2&#x27;</span>, <span class="hljs-string">&#x27;C3&#x27;</span>], <span class="hljs-string">&#x27;D&#x27;</span>: [<span class="hljs-string">&#x27;D0&#x27;</span>, <span class="hljs-string">&#x27;D1&#x27;</span>, <span class="hljs-string">&#x27;D2&#x27;</span>, <span class="hljs-string">&#x27;D3&#x27;</span>]&#125;)<br><br>merged_on_multi_keys = pd.merge(left, right, on=[<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;key2&#x27;</span>])<br><span class="hljs-built_in">print</span>(merged_on_multi_keys)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li>当连接需要基于多个键时，<code>on</code> 参数可以接收一个<strong>键名列表</strong>。只有当列表中所有键的值都相同时，行才会被合并。</li>
+</ul>
+</li>
+</ul>
+<h3 id="20-merge｜左外连接"><a href="#20-merge｜左外连接" class="headerlink" title="20. merge｜左外连接"></a><strong>20. merge｜左外连接</strong></h3><ul>
+<li><strong>题目</strong>: 保留左表全部键。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">merged_left_join = pd.merge(left, right, how=<span class="hljs-string">&#x27;left&#x27;</span>, on=[<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;key2&#x27;</span>])<br><span class="hljs-built_in">print</span>(merged_left_join)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><strong><code>how=&#39;left&#39;</code></strong>: <code>how</code> 参数定义了连接的方式。<ul>
+<li><code>&#39;left&#39;</code>: <strong>左外连接</strong>。以 <code>left</code> 表的键为基准，保留所有 <code>left</code> 表的行。如果在 <code>right</code> 表中找不到匹配的键，则 <code>right</code> 表的列值会用 <code>NaN</code> 填充。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="21-merge｜右外连接"><a href="#21-merge｜右外连接" class="headerlink" title="21. merge｜右外连接"></a><strong>21. merge｜右外连接</strong></h3><ul>
+<li><strong>题目</strong>: 保留右表全部键。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">merged_right_join = pd.merge(left, right, how=<span class="hljs-string">&#x27;right&#x27;</span>, on=[<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;key2&#x27;</span>])<br><span class="hljs-built_in">print</span>(merged_right_join)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><strong><code>how=&#39;right&#39;</code></strong>: <strong>右外连接</strong>。与左连接相反，以 <code>right</code> 表的键为基准，保留所有 <code>right</code> 表的行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="22-merge｜全外连接"><a href="#22-merge｜全外连接" class="headerlink" title="22. merge｜全外连接"></a><strong>22. merge｜全外连接</strong></h3><ul>
+<li><strong>题目</strong>: 保留全部键。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">merged_outer_join = pd.merge(left, right, how=<span class="hljs-string">&#x27;outer&#x27;</span>, on=[<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;key2&#x27;</span>])<br><span class="hljs-built_in">print</span>(merged_outer_join)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><strong><code>how=&#39;outer&#39;</code></strong>: <strong>全外连接</strong>。取 <code>left</code> 和 <code>right</code> 表键的<strong>并集</strong>。对于只在一张表中存在的键，另一张表的列值会用 <code>NaN</code> 填充。</li>
+</ul>
+</li>
+</ul>
+<h3 id="23-merge｜内连接"><a href="#23-merge｜内连接" class="headerlink" title="23. merge｜内连接"></a><strong>23. merge｜内连接</strong></h3><ul>
+<li><strong>题目</strong>: 保留交集。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">merged_inner_join = pd.merge(left, right, how=<span class="hljs-string">&#x27;inner&#x27;</span>, on=[<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;key2&#x27;</span>])<br><span class="hljs-built_in">print</span>(merged_inner_join)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><strong><code>how=&#39;inner&#39;</code></strong>: <strong>内连接</strong>（这是 <code>merge</code> 的默认行为）。只保留那些在 <code>left</code> 和 <code>right</code> 表中<strong>都存在</strong>的键。</li>
+</ul>
+</li>
+</ul>
+<h3 id="24-merge｜重复索引"><a href="#24-merge｜重复索引" class="headerlink" title="24. merge｜重复索引"></a><strong>24. merge｜重复索引</strong></h3><ul>
+<li><strong>题目</strong>: 重新产生数据并按下图所示进行连接。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">left = pd.DataFrame(&#123;<span class="hljs-string">&#x27;k&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K2&#x27;</span>], <span class="hljs-string">&#x27;v&#x27;</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]&#125;)<br>right = pd.DataFrame(&#123;<span class="hljs-string">&#x27;k&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K3&#x27;</span>], <span class="hljs-string">&#x27;v&#x27;</span>: [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>]&#125;)<br><br><span class="hljs-comment"># suffixes 参数用于为重叠的列名添加后缀以区分</span><br>merged_suffixes = pd.merge(left, right, on=<span class="hljs-string">&#x27;k&#x27;</span>, suffixes=(<span class="hljs-string">&#x27;_left&#x27;</span>, <span class="hljs-string">&#x27;_right&#x27;</span>))<br><span class="hljs-built_in">print</span>(merged_suffixes)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li>当两个待合并的 DataFrame 中有<strong>除了连接键之外的同名列</strong>时（如此处的 <code>&#39;v&#39;</code>），直接合并会报错。</li>
+<li><strong><code>suffixes=(&#39;_left&#39;, &#39;_right&#39;)</code></strong>: 这个参数可以解决该问题。它会为来自左表的重名列添加 <code>_left</code> 后缀，为来自右表的重名列添加 <code>_right</code> 后缀。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="数据合并-join"><a href="#数据合并-join" class="headerlink" title="数据合并 (join)"></a><strong>数据合并 (join)</strong></h2><p><code>join</code> 是一个 DataFrame 的<strong>实例方法</strong>（即 <code>left.join(right)</code>），它主要用于基于<strong>索引</strong>来合并数据，可以看作是 <code>merge</code> 的一种便捷方式。</p>
+<h3 id="25-join｜左对齐"><a href="#25-join｜左对齐" class="headerlink" title="25. join｜左对齐"></a><strong>25. join｜左对齐</strong></h3><ul>
+<li><strong>题目</strong>: 合并 left 和 right，并按照 left 的索引进行对齐。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">left = pd.DataFrame(&#123;<span class="hljs-string">&#x27;A&#x27;</span>: [<span class="hljs-string">&#x27;A0&#x27;</span>, <span class="hljs-string">&#x27;A1&#x27;</span>, <span class="hljs-string">&#x27;A2&#x27;</span>], <span class="hljs-string">&#x27;B&#x27;</span>: [<span class="hljs-string">&#x27;B0&#x27;</span>, <span class="hljs-string">&#x27;B1&#x27;</span>, <span class="hljs-string">&#x27;B2&#x27;</span>]&#125;, index=[<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K2&#x27;</span>])<br>right = pd.DataFrame(&#123;<span class="hljs-string">&#x27;C&#x27;</span>: [<span class="hljs-string">&#x27;C0&#x27;</span>, <span class="hljs-string">&#x27;C2&#x27;</span>, <span class="hljs-string">&#x27;C3&#x27;</span>], <span class="hljs-string">&#x27;D&#x27;</span>: [<span class="hljs-string">&#x27;D0&#x27;</span>, <span class="hljs-string">&#x27;D2&#x27;</span>, <span class="hljs-string">&#x27;D3&#x27;</span>]&#125;, index=[<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K2&#x27;</span>, <span class="hljs-string">&#x27;K3&#x27;</span>])<br><br>joined_df = left.join(right)<br><span class="hljs-built_in">print</span>(joined_df)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>left.join(right)</code> 默认执行的是<strong>左连接</strong> (<code>how=&#39;left&#39;</code>)。它会遍历 <code>left</code> 表的每一个索引，去 <code>right</code> 表中查找相同的索引，如果找到就合并，找不到则用 <code>NaN</code> 填充。</li>
+</ul>
+</li>
+</ul>
+<h3 id="26-join｜左对齐（外连接）"><a href="#26-join｜左对齐（外连接）" class="headerlink" title="26. join｜左对齐（外连接）"></a><strong>26. join｜左对齐（外连接）</strong></h3><ul>
+<li><strong>题目</strong>: 按下图所示进行连接。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">joined_outer = left.join(right, how=<span class="hljs-string">&#x27;outer&#x27;</span>)<br><span class="hljs-built_in">print</span>(joined_outer)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>join</code> 方法同样有 <code>how</code> 参数。<code>how=&#39;outer&#39;</code> 表示进行<strong>全外连接</strong>，取两个表索引的并集。</li>
+</ul>
+</li>
+</ul>
+<h3 id="27-join｜左对齐（内连接）"><a href="#27-join｜左对齐（内连接）" class="headerlink" title="27. join｜左对齐（内连接）"></a><strong>27. join｜左对齐（内连接）</strong></h3><ul>
+<li><strong>题目</strong>: 按下图所示进行连接。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">joined_inner = left.join(right, how=<span class="hljs-string">&#x27;inner&#x27;</span>)<br><span class="hljs-built_in">print</span>(joined_inner)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>how=&#39;inner&#39;</code> 表示进行<strong>内连接</strong>，只保留两个表共有的索引。</li>
+</ul>
+</li>
+</ul>
+<h3 id="28-join｜按索引"><a href="#28-join｜按索引" class="headerlink" title="28. join｜按索引"></a><strong>28. join｜按索引</strong></h3><ul>
+<li><strong>题目</strong>: 重新产生数据并按下图所示进行连接（根据 <code>key</code>）。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">left = pd.DataFrame(&#123;<span class="hljs-string">&#x27;A&#x27;</span>: [<span class="hljs-string">&#x27;A0&#x27;</span>, <span class="hljs-string">&#x27;A1&#x27;</span>, <span class="hljs-string">&#x27;A2&#x27;</span>, <span class="hljs-string">&#x27;A3&#x27;</span>], <span class="hljs-string">&#x27;B&#x27;</span>: [<span class="hljs-string">&#x27;B0&#x27;</span>, <span class="hljs-string">&#x27;B1&#x27;</span>, <span class="hljs-string">&#x27;B2&#x27;</span>, <span class="hljs-string">&#x27;B3&#x27;</span>], <span class="hljs-string">&#x27;key&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>]&#125;)<br>right = pd.DataFrame(&#123;<span class="hljs-string">&#x27;C&#x27;</span>: [<span class="hljs-string">&#x27;C0&#x27;</span>, <span class="hljs-string">&#x27;C1&#x27;</span>], <span class="hljs-string">&#x27;D&#x27;</span>: [<span class="hljs-string">&#x27;D0&#x27;</span>, <span class="hljs-string">&#x27;D1&#x27;</span>]&#125;, index=[<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>])<br><br>joined_on_key = left.join(right, on=<span class="hljs-string">&#x27;key&#x27;</span>)<br><span class="hljs-built_in">print</span>(joined_on_key)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>join</code> 方法除了能基于索引连接，也可以使用 <code>on</code> 参数指定 <code>left</code> 表中的<strong>某一列</strong>去和 <code>right</code> 表的<strong>索引</strong>进行匹配连接。</li>
+</ul>
+</li>
+</ul>
+<h3 id="29-join｜按索引（多个）"><a href="#29-join｜按索引（多个）" class="headerlink" title="29. join｜按索引（多个）"></a><strong>29. join｜按索引（多个）</strong></h3><ul>
+<li><strong>题目</strong>: 重新产生数据并按下图所示进行连接（根据 <code>key1</code> 和 <code>key2</code>）。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">left = pd.DataFrame(&#123;<span class="hljs-string">&#x27;A&#x27;</span>: [<span class="hljs-string">&#x27;A0&#x27;</span>, <span class="hljs-string">&#x27;A1&#x27;</span>, <span class="hljs-string">&#x27;A2&#x27;</span>, <span class="hljs-string">&#x27;A3&#x27;</span>], <span class="hljs-string">&#x27;B&#x27;</span>: [<span class="hljs-string">&#x27;B0&#x27;</span>, <span class="hljs-string">&#x27;B1&#x27;</span>, <span class="hljs-string">&#x27;B2&#x27;</span>, <span class="hljs-string">&#x27;B3&#x27;</span>], <span class="hljs-string">&#x27;key1&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K2&#x27;</span>], <span class="hljs-string">&#x27;key2&#x27;</span>: [<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>]&#125;)<br>index = pd.MultiIndex.from_tuples([(<span class="hljs-string">&#x27;K0&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>), (<span class="hljs-string">&#x27;K1&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>), (<span class="hljs-string">&#x27;K2&#x27;</span>, <span class="hljs-string">&#x27;K0&#x27;</span>), (<span class="hljs-string">&#x27;K2&#x27;</span>, <span class="hljs-string">&#x27;K1&#x27;</span>)])<br>right = pd.DataFrame(&#123;<span class="hljs-string">&#x27;C&#x27;</span>: [<span class="hljs-string">&#x27;C0&#x27;</span>, <span class="hljs-string">&#x27;C1&#x27;</span>, <span class="hljs-string">&#x27;C2&#x27;</span>, <span class="hljs-string">&#x27;C3&#x27;</span>], <span class="hljs-string">&#x27;D&#x27;</span>: [<span class="hljs-string">&#x27;D0&#x27;</span>, <span class="hljs-string">&#x27;D1&#x27;</span>, <span class="hljs-string">&#x27;D2&#x27;</span>, <span class="hljs-string">&#x27;D3&#x27;</span>]&#125;, index=index)<br><br>joined_on_multi_keys = left.join(right, on=[<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;key2&#x27;</span>])<br><span class="hljs-built_in">print</span>(joined_on_multi_keys)<br></code></pre></td></tr></table></figure></li>
+<li><strong>解题过程</strong>:<ul>
+<li><code>on</code> 参数同样可以接收一个<strong>列名列表</strong>。这表示 <code>left</code> 表需要用 <code>key1</code> 和 <code>key2</code> 两列<strong>组合</strong>起来的值，去匹配 <code>right</code> 表的<strong>多级索引</strong>。</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/pandas/" class="category-chain-item">pandas</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/pandas/" class="print-no-link">#pandas</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" class="print-no-link">#数据处理</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>7.数据透视与合并</div>
+      <div>https://blog.wyyy.dpdns.org/2025/7-数据透视与合并/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>lwy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年7月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/6-%E6%95%B0%E6%8D%AE%E5%88%86%E7%BB%84%E4%B8%8E%E8%81%9A%E5%90%88/" title="6.数据分组与聚合">
+                        <span class="hidden-mobile">6.数据分组与聚合</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
