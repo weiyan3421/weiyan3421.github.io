@@ -27,7 +27,7 @@
 <meta property="og:description" content="数据分组与聚合，包括根据条件分组、对分组数据进行统计分析、对分组数据进行可视化等。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-07-27T11:13:58.000Z">
-<meta property="article:modified_time" content="2025-07-27T11:17:50.322Z">
+<meta property="article:modified_time" content="2025-07-31T13:01:47.393Z">
 <meta property="article:author" content="lwy">
 <meta property="article:tag" content="pandas">
 <meta property="article:tag" content="数据处理">
@@ -313,7 +313,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2025年7月27日 晚上
+                    本文最后更新于 2025年7月31日 晚上
                   
                 
               </p>
@@ -544,7 +544,18 @@
 </ul>
 <h3 id="19-聚合统计｜组合"><a href="#19-聚合统计｜组合" class="headerlink" title="19. 聚合统计｜组合"></a><strong>19. 聚合统计｜组合</strong></h3><ul>
 <li><strong>题目</strong>: 对不同岗位(<code>positionName</code>)进行分组，并统计其薪水(<code>salary</code>)中位数和得分(<code>score</code>)均值。</li>
-<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python">  position_stats = df.groupby(<span class="hljs-string">&#x27;positionName&#x27;</span>).agg(<br>      薪水中位数=(<span class="hljs-string">&#x27;salary&#x27;</span>, <span class="hljs-string">&#x27;median&#x27;</span>),<br>      得分均值=(<span class="hljs-string">&#x27;score&#x27;</span>, <span class="hljs-string">&#x27;mean&#x27;</span>)<br>  )<br>  <span class="hljs-built_in">print</span>(position_stats.head())<br>  ```- **解答过程**:<br>  - 这是 `.agg()` 最强大、最推荐的用法：**命名聚合 (Named Aggregation)**。<br>  - 语法是 `agg(新列名=(<span class="hljs-string">&#x27;操作的原始列&#x27;</span>, <span class="hljs-string">&#x27;聚合函数&#x27;</span>))`。<br>  - 这种方式可以一次性对**不同的列**应用**不同的聚合函数**，并且直接生成表意清晰的**新列名**，非常高效和优雅。<br><br><span class="hljs-comment">### **20. 聚合统计｜多层**</span><br>- **题目**: 对不同行政区进行分组，并统计薪水的均值、中位数、方差，以及得分的均值。<br>- **答案**:<br>  ```python<br>  district_multi_stats = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>).agg(&#123;<br>      <span class="hljs-string">&#x27;salary&#x27;</span>: [<span class="hljs-string">&#x27;mean&#x27;</span>, <span class="hljs-string">&#x27;median&#x27;</span>, <span class="hljs-string">&#x27;std&#x27;</span>],<br>      <span class="hljs-string">&#x27;score&#x27;</span>: <span class="hljs-string">&#x27;mean&#x27;</span><br>  &#125;)<br>  <span class="hljs-built_in">print</span>(district_multi_stats)<br></code></pre></td></tr></table></figure></li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">position_stats = df.groupby(<span class="hljs-string">&#x27;positionName&#x27;</span>).agg(<br>    薪水中位数=(<span class="hljs-string">&#x27;salary&#x27;</span>, <span class="hljs-string">&#x27;median&#x27;</span>),<br>    得分均值=(<span class="hljs-string">&#x27;score&#x27;</span>, <span class="hljs-string">&#x27;mean&#x27;</span>)<br>)<br><span class="hljs-built_in">print</span>(position_stats.head())<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>解答过程</strong>:</li>
+<li>这是 <code>.agg()</code> 最强大、最推荐的用法：**命名聚合 (Named Aggregation)**。</li>
+<li>语法是 <code>agg(新列名=(&#39;操作的原始列&#39;, &#39;聚合函数&#39;))</code>。</li>
+<li>这种方式可以一次性对<strong>不同的列</strong>应用<strong>不同的聚合函数</strong>，并且直接生成表意清晰的<strong>新列名</strong>，非常高效和优雅。</li>
+</ul>
+</li>
+</ul>
+<h3 id="20-聚合统计｜多层"><a href="#20-聚合统计｜多层" class="headerlink" title="20. 聚合统计｜多层"></a><strong>20. 聚合统计｜多层</strong></h3><ul>
+<li><strong>题目</strong>: 对不同行政区进行分组，并统计薪水的均值、中位数、方差，以及得分的均值。</li>
+<li><strong>答案</strong>:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">district_multi_stats = df.groupby(<span class="hljs-string">&#x27;district&#x27;</span>).agg(&#123;<br>    <span class="hljs-string">&#x27;salary&#x27;</span>: [<span class="hljs-string">&#x27;mean&#x27;</span>, <span class="hljs-string">&#x27;median&#x27;</span>, <span class="hljs-string">&#x27;std&#x27;</span>],<br>    <span class="hljs-string">&#x27;score&#x27;</span>: <span class="hljs-string">&#x27;mean&#x27;</span><br>&#125;)<br><span class="hljs-built_in">print</span>(district_multi_stats)<br></code></pre></td></tr></table></figure></li>
 <li><strong>解答过程</strong>:<ul>
 <li>当需要对多个列应用不同的聚合函数组合时，可以向 <code>.agg()</code> 传递一个字典。</li>
 <li><strong>字典的键 (key)</strong> 是要操作的列名，如 <code>&#39;salary&#39;</code>。</li>
